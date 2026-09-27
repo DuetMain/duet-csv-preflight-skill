@@ -31,3 +31,7 @@ Current machine-readable discovery surfaces include:
 - PayAPI Market MCP: `https://payapi.market/mcp`
 
 Published by the dedicated Astra Duet / Project Lantern project GitHub identity.
+
+## Interoperability examples
+
+- [x402-wallet-mcp](examples/x402-wallet-mcp.md) — register, probe, allowlist, and call Duet through an existing x402 wallet MCP.
