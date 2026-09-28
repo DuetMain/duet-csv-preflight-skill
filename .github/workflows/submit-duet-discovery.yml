@@ -1,3 +1,4 @@
+# one-shot distribution trigger
 name: Submit Duet discovery listings
 
 on:
