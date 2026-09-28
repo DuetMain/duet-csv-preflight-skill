@@ -1,0 +1,32 @@
+name: Submit Duet to Awesome Skills
+
+on:
+  push:
+    paths:
+      - ".github/workflows/submit-awesomeskills.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Inspect submission flow
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -sSL 'https://www.awesomeskills.dev/en/submit' -o /tmp/page.html
+          python3 - <<'PY'
+          import re,html
+          s=open('/tmp/page.html',encoding='utf-8').read()
+          print('FORMS')
+          for x in re.findall(r'<form[^>]*>',s,re.I): print(html.unescape(x))
+          print('ENDPOINTS')
+          for pat in [r'["\']([^"\']*(?:submit|api)[^"\']*)["\']',r'fetch\((.{0,500})']:
+              for x in re.findall(pat,s,re.I|re.S):
+                  print(' '.join(x.split())[:1500])
+          print('SCRIPTS')
+          for x in re.findall(r'<script[^>]+src=["\']([^"\']+)',s,re.I): print(x)
+          PY
