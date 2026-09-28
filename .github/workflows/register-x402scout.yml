@@ -1,0 +1,31 @@
+name: Register Duet with x402 Scout
+
+on:
+  push:
+    paths:
+      - ".github/workflows/register-x402scout.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  register:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Register Duet
+        shell: bash
+        run: |
+          set -euo pipefail
+          body='{"name":"Duet CSV Preflight","url":"https://duet-csv-preflight.projectlantern-review.workers.dev/v1/preflight","price_usd":0.005,"category":"data","description":"Deterministic CSV import preflight for agents before ETL, migration, spreadsheet/database ingestion, or other downstream CSV writes. Checks structural and data-quality hazards including row-width mismatches, missing required values, duplicate rows or keys, outer whitespace, formula-like cells, and CSV structure errors.","network":"base-mainnet"}'
+          status="$(curl -sS -o /tmp/x402scout.json -w '%{http_code}' \
+            -X POST 'https://x402scout.com/register' \
+            -H 'content-type: application/json' \
+            --data "$body")"
+          cat /tmp/x402scout.json
+          echo
+          echo "x402 Scout HTTP status: $status"
+          case "$status" in
+            200|201|202|409) ;;
+            *) exit 1 ;;
+          esac
