@@ -25,20 +25,25 @@ jobs:
           target='0xa9a52a066e342e2ed2488bbdb9fad95efd3d9fd4'
           usdc='0x833589fcd6edb6e08f4c7c32d4f71b54bda02913'
           out=[]
+          sample=[]
           for x in items:
               tok=(x.get('token') or {})
-              addr=(tok.get('address') or tok.get('contract_address') or '').lower()
+              addr=(tok.get('address_hash') or tok.get('address') or tok.get('contract_address') or '').lower()
               to=((x.get('to') or {}).get('hash') or x.get('to_hash') or '').lower()
+              row={
+                'tx': x.get('transaction_hash'),
+                'timestamp': x.get('timestamp'),
+                'token': addr,
+                'symbol': tok.get('symbol'),
+                'from': ((x.get('from') or {}).get('hash') or x.get('from_hash')),
+                'to': ((x.get('to') or {}).get('hash') or x.get('to_hash')),
+                'total': x.get('total'),
+                'type': x.get('type')
+              }
+              if len(sample)<10: sample.append(row)
               if addr==usdc and to==target:
-                  out.append({
-                    'tx': x.get('transaction_hash'),
-                    'timestamp': x.get('timestamp'),
-                    'from': ((x.get('from') or {}).get('hash') or x.get('from_hash')),
-                    'to': ((x.get('to') or {}).get('hash') or x.get('to_hash')),
-                    'total': x.get('total'),
-                    'type': x.get('type')
-                  })
-          print(json.dumps({'inbound_usdc_count_in_page':len(out),'inbound_usdc':out},indent=2))
+                  out.append(row)
+          print(json.dumps({'page_items':len(items),'sample':sample,'inbound_usdc_count_in_page':len(out),'inbound_usdc':out},indent=2))
           PY
 
       - name: Verify agent-tools.cloud public card
