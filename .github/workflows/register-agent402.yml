@@ -1,0 +1,30 @@
+name: Register Duet with Agent402 index
+
+on:
+  push:
+    paths:
+      - ".github/workflows/register-agent402.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  register:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Register x402 origin
+        shell: bash
+        run: |
+          set -euo pipefail
+          status="$(curl -sS -o /tmp/agent402.json -w '%{http_code}' \
+            -X POST 'https://agent402.tools/api/index/register' \
+            -H 'content-type: application/json' \
+            --data '{"origin":"https://duet-csv-preflight.projectlantern-review.workers.dev"}')"
+          cat /tmp/agent402.json
+          echo
+          echo "Agent402 HTTP status: $status"
+          case "$status" in
+            200|201|202|409) ;;
+            *) exit 1 ;;
+          esac
