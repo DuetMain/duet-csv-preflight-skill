@@ -71,3 +71,24 @@ jobs:
           PY
             fi
           done
+
+      - name: Check Agent402 indexed seller
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -sS 'https://agent402.tools/api/index?seller=duet-csv-preflight.projectlantern-review.workers.dev' -o /tmp/agent402.json
+          python3 -m json.tool /tmp/agent402.json || cat /tmp/agent402.json
+
+      - name: Check Market402 operator state
+        shell: bash
+        run: |
+          set -u
+          for u in \
+            'https://market402.com/badge/duet-csv-preflight.projectlantern-review.workers.dev' \
+            'https://market402.com/op/duet-csv-preflight.projectlantern-review.workers.dev.json' \
+            'https://market402.com/op/duet-csv-preflight.projectlantern-review.workers.dev'; do
+            code="$(curl -sSL -o /tmp/m402 -w '%{http_code}' "$u")"
+            echo "URL $u HTTP $code"
+            head -c 5000 /tmp/m402
+            echo
+          done
