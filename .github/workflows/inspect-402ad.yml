@@ -1,0 +1,49 @@
+name: Inspect free 402.ad submission
+
+on:
+  push:
+    paths:
+      - ".github/workflows/inspect-402ad.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Inspect submit page client code
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -sSL 'https://402.ad/submit' -o /tmp/page.html
+          python3 - <<'PY'
+          import re, html
+          s=open('/tmp/page.html',encoding='utf-8').read()
+          print('FORM TAGS:')
+          for x in re.findall(r'<form[^>]*>',s,re.I):
+              print(html.unescape(x)[:2000])
+          print('SCRIPT SOURCES:')
+          srcs=re.findall(r'<script[^>]+src=["\']([^"\']+)',s,re.I)
+          for x in srcs: print(x)
+          open('/tmp/srcs.txt','w').write('\n'.join(srcs))
+          PY
+          while IFS= read -r src; do
+            [ -z "$src" ] && continue
+            case "$src" in http*) url="$src";; *) url="https://402.ad$src";; esac
+            curl -sSL "$url" >> /tmp/all.js || true
+            printf '\n' >> /tmp/all.js
+          done < /tmp/srcs.txt
+          echo 'RELEVANT CLIENT STRINGS:'
+          python3 - <<'PY'
+          import re
+          s=open('/tmp/all.js',encoding='utf-8',errors='ignore').read()
+          pats=[r'.{0,220}/v1/submit.{0,500}',r'.{0,220}submit.{0,600}',r'.{0,220}x402.{0,600}',r'.{0,220}GitHub Repository URL.{0,600}']
+          seen=set()
+          for pat in pats:
+              for m in re.findall(pat,s,re.I|re.S):
+                  t=' '.join(m.split())
+                  if t not in seen:
+                      seen.add(t); print(t[:1400])
+          PY
