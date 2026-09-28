@@ -1,0 +1,35 @@
+name: Inspect agent-tools.cloud submission schema
+
+on:
+  push:
+    paths:
+      - ".github/workflows/inspect-agenttools.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - name: Inspect public source
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone -q --depth 1 https://github.com/AgentTools-Cloud/AgentToolsCollection.git /tmp/agenttools
+          echo 'MATCHES'
+          grep -RIn --exclude='*.bak*' -E 'api/v1/submit|submit_service|submission.*dedupe|class .*Submit|def .*submit' /tmp/agenttools | head -100 || true
+          echo 'CONTEXT'
+          python3 - <<'PY'
+          import pathlib,re
+          for p in pathlib.Path('/tmp/agenttools').rglob('*.py'):
+              if '.bak' in p.name: continue
+              s=p.read_text(errors='ignore')
+              for pat in ['api/v1/submit','submit_service','submission']:
+                  i=s.find(pat)
+                  if i>=0:
+                      print('\nFILE',p,'PAT',pat)
+                      print(s[max(0,i-1800):i+5000])
+                      break
+          PY
