@@ -9,37 +9,24 @@ permissions:
   contents: read
 
 jobs:
-  inspect:
+  submit:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - name: Inspect submission client
+      - name: Submit canonical skill path
         shell: bash
         run: |
-          set -euo pipefail
-          curl -sSL 'https://www.awesomeskills.dev/en/submit' -o /tmp/page.html
-          python3 - <<'PY'
-          import re
-          s=open('/tmp/page.html',encoding='utf-8').read()
-          srcs=re.findall(r'<script[^>]+src=["\']([^"\']+)',s,re.I)
-          open('/tmp/srcs','w').write('\n'.join(srcs))
-          print('\n'.join(srcs))
-          PY
-          : > /tmp/all.js
-          while IFS= read -r p; do
-            [ -z "$p" ] && continue
-            case "$p" in http*) u="$p";; /*) u="https://www.awesomeskills.dev$p";; *) u="https://www.awesomeskills.dev/$p";; esac
-            curl -sSL "$u" >> /tmp/all.js || true
-            printf '\n' >> /tmp/all.js
-          done < /tmp/srcs
-          python3 - <<'PY'
-          import re
-          s=open('/tmp/all.js',encoding='utf-8',errors='ignore').read()
-          for key in ['SubmitForm','fetch(','/api/','submit','githubUrl','repoUrl','repository']:
-              print('\nKEY',key)
-              n=0
-              for m in re.finditer(re.escape(key),s,re.I):
-                  print(' '.join(s[max(0,m.start()-700):m.end()+1600].split())[:3000])
-                  n+=1
-                  if n>=5: break
-          PY
+          set -u
+          body='{"url":"https://github.com/DuetMain/duet-csv-preflight-skill/tree/main/skills/duet-csv-preflight"}'
+          status="$(curl -sS -o /tmp/submit.json -w '%{http_code}' \
+            -X POST 'https://www.awesomeskills.dev/api/v1/submit' \
+            -H 'content-type: application/json' \
+            --data "$body")"
+          cat /tmp/submit.json
+          echo
+          echo "Awesome Skills submit HTTP status: $status"
+          case "$status" in
+            200|201|202|409) exit 0 ;;
+            400|401|403) echo "Human verification or validation required; stop without retrying." ; exit 0 ;;
+            *) exit 1 ;;
+          esac
