@@ -13,30 +13,32 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - name: Inspect submit page source
+      - name: Inspect Svelte client route
         shell: bash
         run: |
           set -euo pipefail
           curl -sSL 'https://402.ad/submit' -o /tmp/page.html
           python3 - <<'PY'
-          import re, html
+          import re
           s=open('/tmp/page.html',encoding='utf-8').read()
-          print('LEN',len(s))
-          print('FORM TAGS')
-          for x in re.findall(r'<form[^>]*>',s,re.I):
-              print(html.unescape(x))
-          print('INPUTS/TEXTAREAS/SELECTS/BUTTONS')
-          for pat in [r'<input[^>]*>',r'<textarea[^>]*>',r'<select[^>]*>',r'<button[^>]*>']:
-              for x in re.findall(pat,s,re.I):
-                  print(html.unescape(x)[:1500])
-          print('ENDPOINT-LIKE STRINGS')
-          for pat in [r'["\']([^"\']*(?:api|submit|search)[^"\']*)["\']',r'fetch\((.{0,500})',r'XMLHttpRequest.{0,500}']:
-              for x in re.findall(pat,s,re.I|re.S):
-                  t=' '.join(x.split())
-                  if len(t)<1200: print(t)
-          print('INLINE SCRIPT SNIPPETS')
-          for script in re.findall(r'<script[^>]*>(.*?)</script>',s,re.I|re.S):
-              t=' '.join(html.unescape(script).split())
-              if any(k in t.lower() for k in ['submit','fetch(','x402','api']):
-                  print(t[:5000])
+          urls=sorted(set(re.findall(r'["\']([^"\']+_app/immutable/[^"\']+\.js)["\']',s)))
+          print('ASSETS',*urls,sep='\n')
+          open('/tmp/assets','w').write('\n'.join(urls))
+          PY
+          : > /tmp/all.js
+          while IFS= read -r p; do
+            [ -z "$p" ] && continue
+            case "$p" in http*) u="$p";; /*) u="https://402.ad$p";; *) u="https://402.ad/$p";; esac
+            echo "FETCH $u"
+            curl -sSL "$u" >> /tmp/all.js || true
+            printf '\n' >> /tmp/all.js
+          done < /tmp/assets
+          python3 - <<'PY'
+          import re
+          s=open('/tmp/all.js',encoding='utf-8',errors='ignore').read()
+          for key in ['/v1/submit','submitForReview','x402_url','endpoint','api_url','github_url','use_case','search_query','searched_first','tool_type','service_type']:
+              print('\nKEY',key)
+              for m in re.finditer(re.escape(key),s,re.I):
+                  print(' '.join(s[max(0,m.start()-500):m.end()+1200].split())[:2200])
+                  break
           PY
