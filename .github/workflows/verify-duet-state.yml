@@ -1,0 +1,68 @@
+name: Verify Duet external state
+
+on:
+  push:
+    paths:
+      - ".github/workflows/verify-duet-state.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check Base USDC transfers
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -sS 'https://base.blockscout.com/api/v2/addresses/0xa9a52a066e342e2ED2488BBdb9fAd95EFd3D9FD4/token-transfers?type=ERC-20' -o /tmp/transfers.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/transfers.json'))
+          items=d.get('items',[])
+          target='0xa9a52a066e342e2ed2488bbdb9fad95efd3d9fd4'
+          usdc='0x833589fcd6edb6e08f4c7c32d4f71b54bda02913'
+          out=[]
+          for x in items:
+              tok=(x.get('token') or {})
+              addr=(tok.get('address') or tok.get('contract_address') or '').lower()
+              to=((x.get('to') or {}).get('hash') or x.get('to_hash') or '').lower()
+              if addr==usdc and to==target:
+                  out.append({
+                    'tx': x.get('transaction_hash'),
+                    'timestamp': x.get('timestamp'),
+                    'from': ((x.get('from') or {}).get('hash') or x.get('from_hash')),
+                    'to': ((x.get('to') or {}).get('hash') or x.get('to_hash')),
+                    'total': x.get('total'),
+                    'type': x.get('type')
+                  })
+          print(json.dumps({'inbound_usdc_count_in_page':len(out),'inbound_usdc':out},indent=2))
+          PY
+
+      - name: Verify agent-tools.cloud public card
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -sS 'https://agent-tools.cloud/api/v1/services/duet-csv-preflight-projectlantern-review-workers-dev-sub983' | python3 -m json.tool || true
+
+      - name: Verify Awesome Skills public page
+        shell: bash
+        run: |
+          set -euo pipefail
+          for u in \
+            'https://www.awesomeskills.dev/en/skill/duet-csv-preflight-skill-duet-csv-preflight' \
+            'https://www.awesomeskills.dev/skill/duet-csv-preflight-skill-duet-csv-preflight'; do
+            code="$(curl -sSL -o /tmp/skillpage -w '%{http_code}' "$u")"
+            echo "URL $u HTTP $code"
+            if [ "$code" = "200" ]; then
+              python3 - <<'PY'
+          import re
+          s=open('/tmp/skillpage',encoding='utf-8',errors='ignore').read()
+          for needle in ['duet-csv-preflight','Duet CSV Preflight']:
+              print(needle, needle.lower() in s.lower())
+          print(re.sub(r'<[^>]+>',' ',s)[:1200])
+          PY
+            fi
+          done
