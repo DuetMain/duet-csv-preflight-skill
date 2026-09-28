@@ -13,32 +13,20 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - name: Inspect Svelte client route
+      - name: Inspect submit route code
         shell: bash
         run: |
           set -euo pipefail
-          curl -sSL 'https://402.ad/submit' -o /tmp/page.html
+          curl -sSL 'https://402.ad/_app/immutable/nodes/40.DGySbIch.js' -o /tmp/node.js
           python3 - <<'PY'
           import re
-          s=open('/tmp/page.html',encoding='utf-8').read()
-          urls=sorted(set(re.findall(r'["\']([^"\']+_app/immutable/[^"\']+\.js)["\']',s)))
-          print('ASSETS',*urls,sep='\n')
-          open('/tmp/assets','w').write('\n'.join(urls))
-          PY
-          : > /tmp/all.js
-          while IFS= read -r p; do
-            [ -z "$p" ] && continue
-            case "$p" in http*) u="$p";; /*) u="https://402.ad$p";; *) u="https://402.ad/$p";; esac
-            echo "FETCH $u"
-            curl -sSL "$u" >> /tmp/all.js || true
-            printf '\n' >> /tmp/all.js
-          done < /tmp/assets
-          python3 - <<'PY'
-          import re
-          s=open('/tmp/all.js',encoding='utf-8',errors='ignore').read()
-          for key in ['nodes/40','/v1/submit','submitForReview','x402_url','endpoint','api_url','github_url','use_case','search_query','searched_first','tool_type','service_type']:
+          s=open('/tmp/node.js',encoding='utf-8',errors='ignore').read()
+          print('LEN',len(s))
+          for key in ['/v1/submit','fetch(','FormData','github','package','endpoint','x402','searched','searchQuery','useCase','toolType','apiUrl','url:']:
               print('\nKEY',key)
+              n=0
               for m in re.finditer(re.escape(key),s,re.I):
-                  print(' '.join(s[max(0,m.start()-1200):m.end()+2400].split())[:5000])
-                  break
+                  print(' '.join(s[max(0,m.start()-900):m.end()+1800].split())[:3200])
+                  n+=1
+                  if n>=3: break
           PY
