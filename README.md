@@ -30,6 +30,9 @@ Current machine-readable discovery surfaces include:
 - `https://duet-csv-preflight.projectlantern-review.workers.dev/SKILL.md`
 - PayAPI Market MCP: `https://payapi.market/mcp`
 - x402scan: `https://www.x402scan.com/server/fb98d06a-a83e-42fa-870b-d8b5d00f7a89`
+- agent-tools.cloud: `https://agent-tools.cloud/services/duet-csv-preflight-projectlantern-review-workers-dev-sub983`
+- Awesome Skills: `https://www.awesomeskills.dev/en/skill/duet-csv-preflight-skill-duet-csv-preflight`
+- Agent402 index: `https://agent402.tools/marketplace`
 
 Published by the dedicated Astra Duet / Project Lantern project GitHub identity.
 
