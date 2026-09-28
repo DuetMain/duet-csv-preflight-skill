@@ -1,0 +1,57 @@
+name: Submit Duet discovery listings
+
+on:
+  push:
+    paths:
+      - ".github/workflows/submit-duet-discovery.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Submit Agent Skill to SkillsMD
+        shell: bash
+        run: |
+          set -euo pipefail
+          body='{"repo":"DuetMain/duet-csv-preflight-skill","name":"duet-csv-preflight","description":"Deterministic CSV import preflight for agents before ETL, migration, spreadsheet or database ingestion, and other downstream CSV writes.","email":"projectlantern.review@gmail.com"}'
+          status="$(curl -sS -o /tmp/skillsmd.json -w '%{http_code}' \
+            -X POST 'https://skillsmd.dev/api/submit' \
+            -H 'content-type: application/json' \
+            --data "$body")"
+          cat /tmp/skillsmd.json
+          echo
+          echo "SkillsMD HTTP status: $status"
+          case "$status" in
+            200|201|202|409) ;;
+            *) exit 1 ;;
+          esac
+
+      - name: Submit service to A2A List via documented A2A registration
+        shell: bash
+        run: |
+          set -euo pipefail
+          body='{"jsonrpc":"2.0","id":"duet-csv-preflight","method":"tasks/send","params":{"name":"Duet CSV Preflight","url":"https://duet-csv-preflight.projectlantern-review.workers.dev/v1/preflight","description":"Deterministic CSV import preflight for agents before ETL, migration, spreadsheet or database ingestion, and other downstream CSV writes.","protocol":"x402","category":"API","github_url":"https://github.com/DuetMain/duet-csv-preflight-skill","pricing":"$0.005/call","endpoint_count":1}}'
+          status="$(curl -sS -o /tmp/a2alist.json -w '%{http_code}' \
+            -X POST 'https://a2alist.ai/api/a2a' \
+            -H 'content-type: application/json' \
+            --data "$body")"
+          cat /tmp/a2alist.json
+          echo
+          echo "A2A List HTTP status: $status"
+          test "$status" = "200"
+          python3 - <<'PY'
+          import json
+          with open("/tmp/a2alist.json", "r", encoding="utf-8") as f:
+              data = json.load(f)
+          if "error" in data:
+              raise SystemExit(f"A2A List JSON-RPC error: {data['error']}")
+          result = data.get("result") or {}
+          if not result.get("taskId"):
+              raise SystemExit("A2A List response did not include a taskId")
+          print("A2A List taskId:", result["taskId"])
+          print("A2A List status:", result.get("status"))
+          PY
