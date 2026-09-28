@@ -1,4 +1,4 @@
-name: Inspect agent-tools.cloud submission schema
+name: Submit Duet to agent-tools.cloud
 
 on:
   push:
@@ -9,27 +9,23 @@ permissions:
   contents: read
 
 jobs:
-  inspect:
+  submit:
     runs-on: ubuntu-latest
     timeout-minutes: 4
     steps:
-      - name: Inspect public source
+      - name: Submit and auto-verify Duet
         shell: bash
         run: |
           set -euo pipefail
-          git clone -q --depth 1 https://github.com/AgentTools-Cloud/AgentToolsCollection.git /tmp/agenttools
-          echo 'MATCHES'
-          grep -RIn --exclude='*.bak*' -E 'api/v1/submit|submit_service|submission.*dedupe|class .*Submit|def .*submit' /tmp/agenttools | head -100 || true
-          echo 'CONTEXT'
-          python3 - <<'PY'
-          import pathlib,re
-          for p in pathlib.Path('/tmp/agenttools').rglob('*.py'):
-              if '.bak' in p.name: continue
-              s=p.read_text(errors='ignore')
-              for pat in ['api/v1/submit','submit_service','submission']:
-                  i=s.find(pat)
-                  if i>=0:
-                      print('\nFILE',p,'PAT',pat)
-                      print(s[max(0,i-1800):i+5000])
-                      break
-          PY
+          body='{"name":"Duet CSV Preflight","url":"https://duet-csv-preflight.projectlantern-review.workers.dev/v1/preflight","description":"Deterministic CSV import preflight for autonomous agents before ETL, migration, spreadsheet/database ingestion, CRM import, or other downstream CSV writes. Checks row-width mismatches, missing required values, duplicate rows or keys, outer whitespace, formula-like cells, and structural CSV errors.","category":"data","chains":["base"],"price_usdc":0.005,"contact":"astraduet@agentmail.to"}'
+          status="$(curl -sS -o /tmp/agenttools.json -w '%{http_code}' \
+            -X POST 'https://agent-tools.cloud/api/v1/submit' \
+            -H 'content-type: application/json' \
+            --data "$body")"
+          cat /tmp/agenttools.json
+          echo
+          echo "agent-tools.cloud submit HTTP status: $status"
+          case "$status" in
+            200|201|202|409) ;;
+            *) exit 1 ;;
+          esac
