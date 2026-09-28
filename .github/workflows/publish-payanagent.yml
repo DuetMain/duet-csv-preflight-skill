@@ -1,0 +1,106 @@
+name: Publish Duet on PayanAgent
+
+on:
+  push:
+    paths:
+      - ".github/workflows/publish-payanagent.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Register provider and relay offer
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          register_status="$(curl -sS -o /tmp/payanagent-register.json -w '%{http_code}' \
+            -X POST 'https://payanagent.com/api/v1/agents' \
+            -H 'content-type: application/json' \
+            --data @- <<'JSON'
+          {
+            "name": "Duet CSV Preflight",
+            "description": "Deterministic CSV import preflight for agents before ETL, migration, spreadsheet/database ingestion, CRM import, or other downstream CSV writes.",
+            "walletAddress": "0xa9a52a066e342e2ED2488BBdb9fAd95EFd3D9FD4",
+            "chain": "base",
+            "tags": ["csv", "data-quality", "etl", "migration", "x402"],
+            "providerType": "api",
+            "agentUrl": "https://duet-csv-preflight.projectlantern-review.workers.dev",
+            "ownerEmail": "projectlantern.review@gmail.com"
+          }
+          JSON
+          )"
+
+          echo "PayanAgent registration HTTP status: $register_status"
+          case "$register_status" in
+            200|201) ;;
+            *)
+              python3 - <<'PY'
+          import json
+          try:
+              d=json.load(open("/tmp/payanagent-register.json"))
+              d.pop("apiKey", None)
+              print(json.dumps(d))
+          except Exception:
+              print("Registration failed; response withheld if not valid JSON.")
+          PY
+              exit 1
+              ;;
+          esac
+
+          API_KEY="$(python3 - <<'PY'
+          import json
+          d=json.load(open("/tmp/payanagent-register.json"))
+          k=d.get("apiKey")
+          if not k:
+              raise SystemExit("PayanAgent registration returned no apiKey")
+          print(k)
+          PY
+          )"
+
+          python3 - <<'PY'
+          import json
+          d=json.load(open("/tmp/payanagent-register.json"))
+          print(json.dumps({
+            "agentId": d.get("agentId"),
+            "apiKeyPrefix": d.get("apiKeyPrefix"),
+            "registered": True
+          }))
+          PY
+
+          offer_status="$(curl -sS -o /tmp/payanagent-offer.json -w '%{http_code}' \
+            -X POST 'https://payanagent.com/api/v1/offers' \
+            -H 'content-type: application/json' \
+            -H "authorization: Bearer $API_KEY" \
+            --data @- <<'JSON'
+          {
+            "title": "Duet CSV Preflight",
+            "description": "Deterministic CSV preflight before ETL, migration, spreadsheet/database ingestion, CRM import, or another downstream CSV write. Checks row-width mismatches, missing required values, duplicate rows or keys, outer whitespace, formula-like cells, and structural CSV errors.",
+            "category": "Data Quality",
+            "tags": ["csv", "data-quality", "etl", "migration", "x402"],
+            "offerType": "api",
+            "externalUrl": "https://duet-csv-preflight.projectlantern-review.workers.dev/v1/preflight",
+            "httpMethod": "POST",
+            "verificationBody": {
+              "csv": "id,name\n1,Alice\n",
+              "requiredFields": ["id"],
+              "keyField": "id"
+            },
+            "inputSchema": "{\"csv\":\"id,name\\n1,Alice\\n\",\"requiredFields\":[\"id\"],\"keyField\":\"id\"}",
+            "outputSchema": "JSON object with service, version, deterministic, sourceDataRetained, summary, counts, issues, and issuesTruncated."
+          }
+          JSON
+          )"
+
+          echo "PayanAgent offer HTTP status: $offer_status"
+          cat /tmp/payanagent-offer.json
+          echo
+
+          case "$offer_status" in
+            200|201|202|409) ;;
+            *) exit 1 ;;
+          esac
