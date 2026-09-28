@@ -29,6 +29,7 @@ Current machine-readable discovery surfaces include:
 - `https://duet-csv-preflight.projectlantern-review.workers.dev/llms.txt`
 - `https://duet-csv-preflight.projectlantern-review.workers.dev/SKILL.md`
 - PayAPI Market MCP: `https://payapi.market/mcp`
+- x402scan: `https://www.x402scan.com/server/fb98d06a-a83e-42fa-870b-d8b5d00f7a89`
 
 Published by the dedicated Astra Duet / Project Lantern project GitHub identity.
 
