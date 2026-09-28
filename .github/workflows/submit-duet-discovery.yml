@@ -28,6 +28,9 @@ jobs:
           echo "SkillsMD HTTP status: $status"
           case "$status" in
             200|201|202|409) ;;
+            404)
+              echo "SkillsMD intake currently cannot resolve the public repository; do not retry automatically."
+              ;;
             *) exit 1 ;;
           esac
 
