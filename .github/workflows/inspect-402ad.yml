@@ -36,9 +36,9 @@ jobs:
           python3 - <<'PY'
           import re
           s=open('/tmp/all.js',encoding='utf-8',errors='ignore').read()
-          for key in ['/v1/submit','submitForReview','x402_url','endpoint','api_url','github_url','use_case','search_query','searched_first','tool_type','service_type']:
+          for key in ['nodes/40','/v1/submit','submitForReview','x402_url','endpoint','api_url','github_url','use_case','search_query','searched_first','tool_type','service_type']:
               print('\nKEY',key)
               for m in re.finditer(re.escape(key),s,re.I):
-                  print(' '.join(s[max(0,m.start()-500):m.end()+1200].split())[:2200])
+                  print(' '.join(s[max(0,m.start()-1200):m.end()+2400].split())[:5000])
                   break
           PY
