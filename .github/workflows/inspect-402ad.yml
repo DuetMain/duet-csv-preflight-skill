@@ -13,20 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - name: Inspect submit route code
+      - name: Inspect 402.ad API client
         shell: bash
         run: |
           set -euo pipefail
-          curl -sSL 'https://402.ad/_app/immutable/nodes/40.DGySbIch.js' -o /tmp/node.js
-          python3 - <<'PY'
-          import re
-          s=open('/tmp/node.js',encoding='utf-8',errors='ignore').read()
-          print('LEN',len(s))
-          for key in ['/v1/submit','fetch(','FormData','github','package','endpoint','x402','searched','searchQuery','useCase','toolType','apiUrl','url:']:
-              print('\nKEY',key)
-              n=0
-              for m in re.finditer(re.escape(key),s,re.I):
-                  print(' '.join(s[max(0,m.start()-900):m.end()+1800].split())[:3200])
-                  n+=1
-                  if n>=3: break
-          PY
+          curl -sSL 'https://402.ad/_app/immutable/chunks/BR_VVxa5.js' -o /tmp/client.js
+          cat /tmp/client.js
