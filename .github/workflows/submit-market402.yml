@@ -1,0 +1,42 @@
+name: Submit Duet to Market402
+
+on:
+  push:
+    paths:
+      - ".github/workflows/submit-market402.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Run free Market402 self-test
+        shell: bash
+        run: |
+          set -u
+          status="$(curl -sS -o /tmp/market402-selftest.json -w '%{http_code}' \
+            -X POST 'https://market402.com/selftest' \
+            -H 'content-type: application/json' \
+            --data '{"url":"https://duet-csv-preflight.projectlantern-review.workers.dev/v1/preflight"}')"
+          cat /tmp/market402-selftest.json
+          echo
+          echo "Market402 self-test HTTP status: $status"
+
+      - name: Submit paid endpoint to Market402
+        shell: bash
+        run: |
+          set -euo pipefail
+          status="$(curl -sS -o /tmp/market402-submit.json -w '%{http_code}' \
+            -X POST 'https://market402.com/submit' \
+            -H 'content-type: application/json' \
+            --data '{"resource":"https://duet-csv-preflight.projectlantern-review.workers.dev/v1/preflight","declared_price_usd":0.005}')"
+          cat /tmp/market402-submit.json
+          echo
+          echo "Market402 submit HTTP status: $status"
+          case "$status" in
+            200|201|202|409) ;;
+            *) exit 1 ;;
+          esac
