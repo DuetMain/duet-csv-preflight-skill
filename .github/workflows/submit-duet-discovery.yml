@@ -14,48 +14,71 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Submit Agent Skill to SkillsMD
+      - name: Record SkillsMD intake blocker
         shell: bash
         run: |
-          set -euo pipefail
-          body='{"repo":"DuetMain/duet-csv-preflight-skill","name":"duet-csv-preflight","description":"Deterministic CSV import preflight for agents before ETL, migration, spreadsheet or database ingestion, and other downstream CSV writes.","email":"projectlantern.review@gmail.com"}'
-          status="$(curl -sS -o /tmp/skillsmd.json -w '%{http_code}' \
-            -X POST 'https://skillsmd.dev/api/submit' \
-            -H 'content-type: application/json' \
-            --data "$body")"
-          cat /tmp/skillsmd.json
-          echo
-          echo "SkillsMD HTTP status: $status"
-          case "$status" in
-            200|201|202|409) ;;
-            404)
-              echo "SkillsMD intake currently cannot resolve the public repository; do not retry automatically."
-              ;;
-            *) exit 1 ;;
-          esac
+          echo "SkillsMD POST /api/submit was already tried against the valid public repo."
+          echo "It returned 404: GitHub repo not found. Do not retry automatically."
 
       - name: Submit service to A2A List via documented A2A registration
         shell: bash
         run: |
           set -euo pipefail
-          body='{"jsonrpc":"2.0","id":"duet-csv-preflight","method":"tasks/send","params":{"name":"Duet CSV Preflight","url":"https://duet-csv-preflight.projectlantern-review.workers.dev/v1/preflight","description":"Deterministic CSV import preflight for agents before ETL, migration, spreadsheet or database ingestion, and other downstream CSV writes.","protocol":"x402","category":"API","github_url":"https://github.com/DuetMain/duet-csv-preflight-skill","pricing":"$0.005/call","endpoint_count":1}}'
-          status="$(curl -sS -o /tmp/a2alist.json -w '%{http_code}' \
+
+          rpc_body='{"jsonrpc":"2.0","id":"duet-csv-preflight","method":"tasks/send","params":{"name":"Duet CSV Preflight","url":"https://duet-csv-preflight.projectlantern-review.workers.dev/v1/preflight","description":"Deterministic CSV import preflight for agents before ETL, migration, spreadsheet or database ingestion, and other downstream CSV writes.","protocol":"x402","category":"API","github_url":"https://github.com/DuetMain/duet-csv-preflight-skill","pricing":"$0.005/call","endpoint_count":1}}'
+          rpc_status="$(curl -sS -o /tmp/a2alist-rpc.json -w '%{http_code}' \
             -X POST 'https://a2alist.ai/api/a2a' \
             -H 'content-type: application/json' \
-            --data "$body")"
-          cat /tmp/a2alist.json
-          echo
-          echo "A2A List HTTP status: $status"
-          test "$status" = "200"
-          python3 - <<'PY'
-          import json
-          with open("/tmp/a2alist.json", "r", encoding="utf-8") as f:
+            --data "$rpc_body")"
+
+          if [ "$rpc_status" = "200" ] && python3 - <<'PY'
+          import json, sys
+          with open("/tmp/a2alist-rpc.json", "r", encoding="utf-8") as f:
               data = json.load(f)
-          if "error" in data:
-              raise SystemExit(f"A2A List JSON-RPC error: {data['error']}")
           result = data.get("result") or {}
-          if not result.get("taskId"):
-              raise SystemExit("A2A List response did not include a taskId")
-          print("A2A List taskId:", result["taskId"])
-          print("A2A List status:", result.get("status"))
+          if result.get("taskId"):
+              print("A2A List submission queued:", result["taskId"], result.get("status"))
+              sys.exit(0)
+          sys.exit(1)
           PY
+          then
+            exit 0
+          fi
+
+          echo "Public A2A JSON-RPC intake is currently broken; using its documented API-key registration fallback."
+
+          key_status="$(curl -sS -o /tmp/a2alist-key.json -w '%{http_code}' \
+            -X POST 'https://a2alist.ai/api/keys' \
+            -H 'content-type: application/json' \
+            --data '{"name":"Astra Duet","email":"projectlantern.review@gmail.com"}')"
+          test "$key_status" = "201"
+
+          api_key="$(python3 - <<'PY'
+          import json
+          with open("/tmp/a2alist-key.json", "r", encoding="utf-8") as f:
+              data = json.load(f)
+          key = data.get("key")
+          if not key:
+              raise SystemExit("API-key response did not contain key")
+          print(key)
+          PY
+          )"
+
+          agent_body='{"name":"Duet CSV Preflight","description":"Deterministic CSV import preflight for agents before ETL, migration, spreadsheet or database ingestion, and other downstream CSV writes.","category":"Other","protocol":"x402","url":"https://duet-csv-preflight.projectlantern-review.workers.dev/v1/preflight","skills":["csv-validation","data-quality","etl","migration"],"input_modes":["application/json"],"output_modes":["application/json"],"provider":"Astra Duet","version":"0.1.1","streaming":false,"push_notifications":false,"pricing":"paid","github":"https://github.com/DuetMain/duet-csv-preflight-skill","submitted_by":"projectlantern.review@gmail.com","chain":"Base","token":"USDC"}'
+
+          agent_status="$(curl -sS -o /tmp/a2alist-agent.json -w '%{http_code}' \
+            -X POST 'https://a2alist.ai/api/agents' \
+            -H 'content-type: application/json' \
+            -H "authorization: Bearer $api_key" \
+            --data "$agent_body")"
+
+          unset api_key
+          rm -f /tmp/a2alist-key.json
+
+          cat /tmp/a2alist-agent.json
+          echo
+          echo "A2A List agent-registration HTTP status: $agent_status"
+          case "$agent_status" in
+            201|409) ;;
+            *) exit 1 ;;
+          esac
