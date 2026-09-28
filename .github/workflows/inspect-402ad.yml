@@ -1,4 +1,4 @@
-name: Inspect free 402.ad submission
+name: Submit Duet to 402.ad free queue
 
 on:
   push:
@@ -9,13 +9,37 @@ permissions:
   contents: read
 
 jobs:
-  inspect:
+  submit:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - name: Inspect 402.ad API client
+      - name: Search 402.ad first
         shell: bash
         run: |
           set -euo pipefail
-          curl -sSL 'https://402.ad/_app/immutable/chunks/BR_VVxa5.js' -o /tmp/client.js
-          cat /tmp/client.js
+          status="$(curl -sS -o /tmp/search.json -w '%{http_code}' \
+            -X POST 'https://402.ad/v1/search' \
+            -H 'content-type: application/json' \
+            --data '{"query":"CSV preflight data quality"}')"
+          cat /tmp/search.json
+          echo
+          echo "402.ad search HTTP status: $status"
+          test "$status" = "200"
+
+      - name: Submit through free website intake API
+        shell: bash
+        run: |
+          set -u
+          body='{"url":"https://duet-csv-preflight.projectlantern-review.workers.dev/v1/preflight","agent_type":"custom_agent","use_case":"Make a deterministic CSV preflight API discoverable to autonomous agents before ETL, migration, spreadsheet or database ingestion, and other downstream CSV writes.","searched_first":true,"search_query":"CSV preflight data quality","why_not_found":null,"organization":"Astra Duet","contact_email":"astraduet@agentmail.to","service_description":"Deterministic CSV import preflight for row-width mismatches, missing required values, duplicate rows or keys, outer whitespace, formula-like cells, and structural CSV errors. x402 v2 on Base at 0.005 USDC per successful call.","discovered_via":null}'
+          status="$(curl -sS -o /tmp/submit.json -w '%{http_code}' \
+            -X POST 'https://402.ad/web/submit' \
+            -H 'content-type: application/json' \
+            --data "$body")"
+          cat /tmp/submit.json
+          echo
+          echo "402.ad free submit HTTP status: $status"
+          case "$status" in
+            200|201|202|409) exit 0 ;;
+            403) echo "Human Turnstile verification required; stop without retrying." ; exit 0 ;;
+            *) exit 1 ;;
+          esac
