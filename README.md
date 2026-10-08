@@ -31,7 +31,7 @@ Current machine-readable discovery surfaces include:
 - [Agent402 indexed origin](https://agent402.tools/api/index?seller=duet-csv-preflight.timbeaux-sora.chatgpt.site)
 - [Awesome Skills package](https://www.awesomeskills.dev/en/skill/duet-csv-preflight-skill-duet-csv-preflight)
 
-The current deployment is managed independently of the legacy Cloudflare account login. On October 8, 2026, the normal Node HTTP client verified health, OpenAPI, discovery, the fixed free sample, and the unpaid x402 v2 challenge at this origin. The advertised price and payout wallet were checked. Six Worker tests and twelve offline adapter tests pass. Paid settlement has been tested with a mocked facilitator only; no live paid end-to-end call or unrelated customer purchase is claimed. The hosting edge rejected the Python urllib client with HTTP 403, so client compatibility is not universal.
+The current deployment is managed independently of the legacy Cloudflare account login. On October 8, 2026, the normal Node HTTP client verified health, OpenAPI, discovery, the fixed free sample, and the unpaid x402 v2 challenge at this origin. The advertised price and payout wallet were checked. Six Worker tests and fourteen offline adapter tests pass. Paid settlement has been tested with a mocked facilitator only; no live paid end-to-end call or unrelated customer purchase is claimed. The hosting edge rejected the Python urllib client with HTTP 403, so client compatibility is not universal.
 
 Older marketplace entries may still name the legacy workers.dev origin. Agent402 indexing is discovery, not proof of router dispatch or customer demand.
 
