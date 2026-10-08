@@ -104,46 +104,46 @@ jobs:
             echo
           done
 
-      - name: Verify public Sites API contract without payment
+      - name: Verify migrated API using the buyer adapter's Node runtime, without payment
         if: always()
         shell: bash
         run: |
-          python3 - <<'PY'
-          import urllib.request, urllib.error, json, base64
-          root='https://duet-csv-preflight.timbeaux-sora.chatgpt.site'
-          results={}
-          for path in ['/health','/openapi.json','/.well-known/x402','/v1/preflight/sample']:
-              req=urllib.request.Request(root+path)
-              try:
-                  response=urllib.request.urlopen(req,timeout=30)
-              except urllib.error.HTTPError as error:
-                  print(json.dumps({'path':path,'status':error.code,'headers':dict(error.headers),'body':error.read(3000).decode('utf-8',errors='replace')}))
-                  raise
-              assert response.status==200, (path,response.status)
-              results[path]=json.load(response)
-              print(json.dumps({'path':path,'status':response.status,'result':results[path]}))
-          assert results['/health']['version']=='0.1.2'
-          assert results['/openapi.json']['servers'][0]['url']==root
-          assert results['/.well-known/x402']['resources'][0]['url']==root+'/v1/preflight'
-          sample=results['/v1/preflight/sample']['result']
-          assert sample['summary']['dataRecords']==3
-          assert sample['summary']['columns']==2
-          assert sample['counts']['KEY_DUPLICATE']==1
-          assert sample['counts']['FORMULA']==1
-          assert sample['importReady'] is False
-          req=urllib.request.Request(root+'/v1/preflight',data=json.dumps({'csv':'id,name\\n1,Alice\\n','requiredFields':['id'],'keyField':'id'}).encode(),headers={'Content-Type':'application/json'},method='POST')
-          try:
-              response=urllib.request.urlopen(req,timeout=30)
-          except urllib.error.HTTPError as error:
-              response=error
-          assert response.status==402, response.status
-          challenge=json.loads(base64.b64decode(response.headers['PAYMENT-REQUIRED']))
-          assert challenge['x402Version']==2
-          assert challenge['resource']['url']==root+'/v1/preflight'
-          accept=challenge['accepts'][0]
-          assert accept['amount']=='5000'
-          assert accept['network']=='eip155:8453'
-          assert accept['payTo']=='0xa9a52a066e342e2ED2488BBdb9fAd95EFd3D9FD4'
-          assert accept['asset']=='0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
-          print(json.dumps({'path':'/v1/preflight','status':response.status,'paymentRequired':challenge,'verification':'PASS_UNPAID_ONLY'}))
-          PY
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          const root='https://duet-csv-preflight.timbeaux-sora.chatgpt.site';
+          const results={};
+          for (const path of ['/health','/openapi.json','/.well-known/x402','/v1/preflight/sample']){
+            const response=await fetch(root+path);
+            const raw=await response.text();
+            console.log(JSON.stringify({path,status:response.status,body:raw}));
+            assert.equal(response.status,200);
+            results[path]=JSON.parse(raw);
+          }
+          assert.equal(results['/health'].version,'0.1.2');
+          assert.equal(results['/openapi.json'].servers[0].url,root);
+          assert.equal(results['/.well-known/x402'].resources[0].url,root+'/v1/preflight');
+          const sample=results['/v1/preflight/sample'].result;
+          assert.equal(sample.summary.dataRecords,3);
+          assert.equal(sample.summary.columns,2);
+          assert.equal(sample.counts.KEY_DUPLICATE,1);
+          assert.equal(sample.counts.FORMULA,1);
+          assert.equal(sample.importReady,false);
+          const response=await fetch(root+'/v1/preflight',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({csv:'id,name\\n1,Alice\\n',requiredFields:['id'],keyField:'id'})});
+          console.log(JSON.stringify({path:'/v1/preflight',status:response.status,body:await response.text()}));
+          assert.equal(response.status,402);
+          const challenge=JSON.parse(Buffer.from(response.headers.get('PAYMENT-REQUIRED'),'base64').toString());
+          assert.equal(challenge.x402Version,2);
+          assert.equal(challenge.resource.url,root+'/v1/preflight');
+          const accept=challenge.accepts[0];
+          assert.equal(accept.amount,'5000');
+          assert.equal(accept.network,'eip155:8453');
+          assert.equal(accept.payTo,'0xa9a52a066e342e2ED2488BBdb9fAd95EFd3D9FD4');
+          assert.equal(accept.asset,'0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913');
+          console.log(JSON.stringify({verification:'PASS_UNPAID_ONLY',paymentRequired:challenge}));
+          JS
+
+      - name: Inspect newly indexed independent origin
+        if: always()
+        shell: bash
+        run: |
+          curl -sS 'https://agent402.tools/api/index?seller=duet-csv-preflight.timbeaux-sora.chatgpt.site' | python3 -m json.tool
