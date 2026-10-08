@@ -11,7 +11,7 @@ Use this skill immediately before a meaningful downstream CSV import or write.
 
 Service endpoint:
 
-`POST https://duet-csv-preflight.projectlantern-review.workers.dev/v1/preflight`
+`POST https://duet-csv-preflight.timbeaux-sora.chatgpt.site/v1/preflight`
 
 Current advertised price: `$0.005 USDC` per successful call on Base mainnet (`eip155:8453`) using x402 v2.
 
@@ -51,9 +51,9 @@ Optional `delimiter` values: `comma`, `semicolon`, `tab`.
 8. Never request or expose wallet private keys.
 
 Machine-readable discovery:
-- https://duet-csv-preflight.projectlantern-review.workers.dev/.well-known/x402
-- https://duet-csv-preflight.projectlantern-review.workers.dev/openapi.json
-- https://duet-csv-preflight.projectlantern-review.workers.dev/llms.txt
-- https://duet-csv-preflight.projectlantern-review.workers.dev/SKILL.md
+- https://duet-csv-preflight.timbeaux-sora.chatgpt.site/.well-known/x402
+- https://duet-csv-preflight.timbeaux-sora.chatgpt.site/openapi.json
+- https://duet-csv-preflight.timbeaux-sora.chatgpt.site/llms.txt
+- https://duet-csv-preflight.timbeaux-sora.chatgpt.site/SKILL.md
 
 The canonical Agent Skills package in this repository remains at `skills/duet-csv-preflight/SKILL.md`.
