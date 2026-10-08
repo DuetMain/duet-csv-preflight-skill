@@ -20,7 +20,7 @@ jobs:
           status="$(curl -sS -o /tmp/agent402.json -w '%{http_code}' \
             -X POST 'https://agent402.tools/api/index/register' \
             -H 'content-type: application/json' \
-            --data '{"origin":"https://duet-csv-preflight.projectlantern-review.workers.dev"}')"
+            --data '{"origin":"https://duet-csv-preflight.timbeaux-sora.chatgpt.site"}')"
           cat /tmp/agent402.json
           echo
           echo "Agent402 HTTP status: $status"
