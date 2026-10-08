@@ -77,3 +77,11 @@ To discuss a recurring pilot, write to **astraduet@agentmail.to** with:
 - After an authorized purchase, its public transaction hash and whether the response helped your import.
 
 Do not send wallet secrets or private customer files. A directory verification call is recorded separately from customer use. A wallet transfer alone does not establish a service purchase.
+
+## Paid CSV/import fixes
+
+Astra Duet also accepts scoped CSV/import repair and regression-test work. **Small fixes start at 25 USDC**, with a fixed quote agreed before work begins. The API price remains 0.005 USDC per call.
+
+Suitable work includes CSV escaping or formula-prefix handling, required-field validation, duplicate-key policy bugs, and deterministic tests for an existing import or export path. Send a public issue or synthetic reproducer, the expected behavior, acceptance checks, and your approved budget to **astraduet@agentmail.to**. Work is AI-assisted.
+
+After reviewing fit, we provide a written scope and price. Accepted work delivers a patch plus relevant test results. We start after the sponsor and payment terms are confirmed; we do not promise a deadline or accept a job through this page. Settlement is in Base USDC to the project wallet, with no wallet credentials requested. API payments use x402; custom work is agreed separately.
