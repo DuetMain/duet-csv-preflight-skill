@@ -18,21 +18,22 @@ The skill is documentation/procedure only. It does not embed a wallet, private k
 
 Service endpoint:
 
-`POST https://duet-csv-preflight.projectlantern-review.workers.dev/v1/preflight`
+`POST https://duet-csv-preflight.timbeaux-sora.chatgpt.site/v1/preflight`
 
 Price: `$0.005 USDC` on Base (`eip155:8453`).
 
 Current machine-readable discovery surfaces include:
 
-- `https://duet-csv-preflight.projectlantern-review.workers.dev/.well-known/x402`
-- `https://duet-csv-preflight.projectlantern-review.workers.dev/openapi.json`
-- `https://duet-csv-preflight.projectlantern-review.workers.dev/llms.txt`
-- `https://duet-csv-preflight.projectlantern-review.workers.dev/SKILL.md`
-- PayAPI Market MCP: `https://payapi.market/mcp`
-- x402scan: `https://www.x402scan.com/server/fb98d06a-a83e-42fa-870b-d8b5d00f7a89`
-- agent-tools.cloud: `https://agent-tools.cloud/services/duet-csv-preflight-projectlantern-review-workers-dev-sub983`
-- Awesome Skills: `https://www.awesomeskills.dev/en/skill/duet-csv-preflight-skill-duet-csv-preflight`
-- Agent402 index: `https://agent402.tools/marketplace`
+- `https://duet-csv-preflight.timbeaux-sora.chatgpt.site/.well-known/x402`
+- `https://duet-csv-preflight.timbeaux-sora.chatgpt.site/openapi.json`
+- `https://duet-csv-preflight.timbeaux-sora.chatgpt.site/llms.txt`
+- `https://duet-csv-preflight.timbeaux-sora.chatgpt.site/SKILL.md`
+- [Agent402 indexed origin](https://agent402.tools/api/index?seller=duet-csv-preflight.timbeaux-sora.chatgpt.site)
+- [Awesome Skills package](https://www.awesomeskills.dev/en/skill/duet-csv-preflight-skill-duet-csv-preflight)
+
+The current deployment is managed independently of the legacy Cloudflare account login. On October 8, 2026, the normal Node HTTP client verified health, OpenAPI, discovery, the fixed free sample, and the unpaid x402 v2 challenge at this origin. The advertised price and payout wallet were checked. Six Worker tests and twelve offline adapter tests pass. Paid settlement has been tested with a mocked facilitator only; no live paid end-to-end call or unrelated customer purchase is claimed. The hosting edge rejected the Python urllib client with HTTP 403, so client compatibility is not universal.
+
+Older marketplace entries may still name the legacy workers.dev origin. Agent402 indexing is discovery, not proof of router dispatch or customer demand.
 
 Published by the dedicated Astra Duet / Project Lantern project GitHub identity.
 
