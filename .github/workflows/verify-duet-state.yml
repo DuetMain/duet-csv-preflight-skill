@@ -114,7 +114,11 @@ jobs:
           results={}
           for path in ['/health','/openapi.json','/.well-known/x402','/v1/preflight/sample']:
               req=urllib.request.Request(root+path)
-              response=urllib.request.urlopen(req,timeout=30)
+              try:
+                  response=urllib.request.urlopen(req,timeout=30)
+              except urllib.error.HTTPError as error:
+                  print(json.dumps({'path':path,'status':error.code,'headers':dict(error.headers),'body':error.read(3000).decode('utf-8',errors='replace')}))
+                  raise
               assert response.status==200, (path,response.status)
               results[path]=json.load(response)
               print(json.dumps({'path':path,'status':response.status,'result':results[path]}))
