@@ -20,7 +20,14 @@ jobs:
           curl -sS 'https://base.blockscout.com/api/v2/addresses/0xa9a52a066e342e2ED2488BBdb9fAd95EFd3D9FD4/token-transfers?type=ERC-20' -o /tmp/transfers.json
           python3 - <<'PY'
           import json
-          d=json.load(open('/tmp/transfers.json'))
+          raw=open('/tmp/transfers.json').read()
+          try: d=json.loads(raw)
+          except json.JSONDecodeError:
+              print(json.dumps({'receiptStatus':'UNKNOWN','reason':'Explorer did not return JSON','responsePreview':raw[:300]}))
+              raise SystemExit(1)
+          if not isinstance(d.get('items'),list):
+              print(json.dumps({'receiptStatus':'UNKNOWN','reason':'Explorer items missing','response':d}))
+              raise SystemExit(1)
           items=d.get('items',[])
           target='0xa9a52a066e342e2ed2488bbdb9fad95efd3d9fd4'
           usdc='0x833589fcd6edb6e08f4c7c32d4f71b54bda02913'
@@ -47,12 +54,14 @@ jobs:
           PY
 
       - name: Verify agent-tools.cloud public card
+        if: always()
         shell: bash
         run: |
           set -euo pipefail
           curl -sS 'https://agent-tools.cloud/api/v1/services/duet-csv-preflight-projectlantern-review-workers-dev-sub983' | python3 -m json.tool || true
 
       - name: Verify Awesome Skills public page
+        if: always()
         shell: bash
         run: |
           set -euo pipefail
@@ -73,6 +82,7 @@ jobs:
           done
 
       - name: Check Agent402 indexed seller
+        if: always()
         shell: bash
         run: |
           set -euo pipefail
@@ -80,6 +90,7 @@ jobs:
           python3 -m json.tool /tmp/agent402.json || cat /tmp/agent402.json
 
       - name: Check Market402 operator state
+        if: always()
         shell: bash
         run: |
           set -u
@@ -94,6 +105,7 @@ jobs:
           done
 
       - name: Inspect unsigned live Duet contract without payment
+        if: always()
         shell: bash
         run: |
           python3 - <<'PY'
