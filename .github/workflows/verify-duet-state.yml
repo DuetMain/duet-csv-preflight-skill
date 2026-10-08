@@ -46,8 +46,8 @@ jobs:
             const fromBlock='0x'+(51700000).toString(16);
             evidence.fromBlock=fromBlock;
             const logs=[];
-            for(let start=51700000;start<=Number(BigInt(latest));start+=50000){
-              const end=Math.min(start+49999,Number(BigInt(latest)));
+            for(let start=51700000;start<=Number(BigInt(latest));start+=10000){
+              const end=Math.min(start+9999,Number(BigInt(latest)));
               const page=await rpc('eth_getLogs',[{address:usdc,topics:[transferTopic,null,topicWallet],fromBlock:'0x'+start.toString(16),toBlock:'0x'+end.toString(16)}]);
               if(!Array.isArray(page)) throw Error('Logs response is not an array');
               logs.push(...page);
