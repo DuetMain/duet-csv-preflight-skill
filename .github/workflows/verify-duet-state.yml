@@ -24,7 +24,7 @@ jobs:
           let id=0;
           async function rpc(method,params){
             await new Promise(resolve=>setTimeout(resolve,1200));
-            const response=await fetch('https://mainnet.base.org',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:++id,method,params}),signal:AbortSignal.timeout(20000)});
+            const response=await fetch('https://base-rpc.publicnode.com',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:++id,method,params}),signal:AbortSignal.timeout(20000)});
             if(!response.ok) throw Error('RPC HTTP '+response.status+' '+(await response.text()).slice(0,500));
             const data=await response.json();
             if(data.error) throw Error(JSON.stringify(data.error));
@@ -33,6 +33,10 @@ jobs:
           }
           const evidence={checkedAt:new Date().toISOString(),wallet,asset:usdc,receiptStatus:'UNKNOWN',spendUsd:0};
           try{
+            const chainId=await rpc('eth_chainId',[]);
+            if(chainId!=='0x2105')throw Error('Unexpected network '+chainId);
+            evidence.chainId=chainId;
+            evidence.rpc='https://base-rpc.publicnode.com';
             const latest=await rpc('eth_blockNumber',[]);
             evidence.toBlock=latest;
             const balance=await rpc('eth_call',[{to:usdc,data:'0x70a08231'+topicWallet.slice(2)},latest]);
@@ -42,8 +46,8 @@ jobs:
             const fromBlock='0x'+(51700000).toString(16);
             evidence.fromBlock=fromBlock;
             const logs=[];
-            for(let start=51700000;start<=Number(BigInt(latest));start+=10000){
-              const end=Math.min(start+9999,Number(BigInt(latest)));
+            for(let start=51700000;start<=Number(BigInt(latest));start+=50000){
+              const end=Math.min(start+49999,Number(BigInt(latest)));
               const page=await rpc('eth_getLogs',[{address:usdc,topics:[transferTopic,null,topicWallet],fromBlock:'0x'+start.toString(16),toBlock:'0x'+end.toString(16)}]);
               if(!Array.isArray(page)) throw Error('Logs response is not an array');
               logs.push(...page);
@@ -52,6 +56,10 @@ jobs:
             }
             evidence.receiptStatus='COMPLETE_FOR_BLOCK_RANGE';
             evidence.inbound=logs.map(log=>({tx:log.transactionHash,block:log.blockNumber,logIndex:log.logIndex,removed:log.removed,from:'0x'+log.topics[1].slice(-40),to:'0x'+log.topics[2].slice(-40),atomic:BigInt(log.data).toString()}));
+            evidence.transactionReceipts=[];
+            for(const tx of [...new Set(evidence.inbound.map(x=>x.tx))]){
+              evidence.transactionReceipts.push(await rpc('eth_getTransactionReceipt',[tx]));
+            }
           }catch(error){evidence.reason=String(error);}
           console.log(JSON.stringify(evidence));
           if(evidence.receiptStatus==='UNKNOWN')process.exitCode=1;
