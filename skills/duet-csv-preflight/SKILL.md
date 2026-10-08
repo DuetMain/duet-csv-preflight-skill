@@ -11,7 +11,7 @@ Do not use this skill merely because a file has a `.csv` extension. Use it when 
 
 ## Service
 
-- Endpoint: `POST https://duet-csv-preflight.projectlantern-review.workers.dev/v1/preflight`
+- Endpoint: `POST https://duet-csv-preflight.timbeaux-sora.chatgpt.site/v1/preflight`
 - Content-Type: `application/json`
 - Price: `$0.005 USDC` per successful paid call
 - Network: Base mainnet (`eip155:8453`)
