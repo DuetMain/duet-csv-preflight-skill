@@ -13,45 +13,41 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Check Base USDC transfers
+      - name: Check public Base receipts without spending
         shell: bash
         run: |
-          set -euo pipefail
-          curl -sS 'https://base.blockscout.com/api/v2/addresses/0xa9a52a066e342e2ED2488BBdb9fAd95EFd3D9FD4/token-transfers?type=ERC-20' -o /tmp/transfers.json
-          python3 - <<'PY'
-          import json
-          raw=open('/tmp/transfers.json').read()
-          try: d=json.loads(raw)
-          except json.JSONDecodeError:
-              print(json.dumps({'receiptStatus':'UNKNOWN','reason':'Explorer did not return JSON','responsePreview':raw[:300]}))
-              raise SystemExit(1)
-          if not isinstance(d.get('items'),list):
-              print(json.dumps({'receiptStatus':'UNKNOWN','reason':'Explorer items missing','response':d}))
-              raise SystemExit(1)
-          items=d.get('items',[])
-          target='0xa9a52a066e342e2ed2488bbdb9fad95efd3d9fd4'
-          usdc='0x833589fcd6edb6e08f4c7c32d4f71b54bda02913'
-          out=[]
-          sample=[]
-          for x in items:
-              tok=(x.get('token') or {})
-              addr=(tok.get('address_hash') or tok.get('address') or tok.get('contract_address') or '').lower()
-              to=((x.get('to') or {}).get('hash') or x.get('to_hash') or '').lower()
-              row={
-                'tx': x.get('transaction_hash'),
-                'timestamp': x.get('timestamp'),
-                'token': addr,
-                'symbol': tok.get('symbol'),
-                'from': ((x.get('from') or {}).get('hash') or x.get('from_hash')),
-                'to': ((x.get('to') or {}).get('hash') or x.get('to_hash')),
-                'total': x.get('total'),
-                'type': x.get('type')
-              }
-              if len(sample)<10: sample.append(row)
-              if addr==usdc and to==target:
-                  out.append(row)
-          print(json.dumps({'page_items':len(items),'sample':sample,'inbound_usdc_count_in_page':len(out),'inbound_usdc':out},indent=2))
-          PY
+          node --input-type=module <<'JS'
+          const wallet='0xa9a52a066e342e2ED2488BBdb9fAd95EFd3D9FD4';
+          const usdc='0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913';
+          const topicWallet='0x'+wallet.slice(2).toLowerCase().padStart(64,'0');
+          const transferTopic='0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
+          let id=0;
+          async function rpc(method,params){
+            const response=await fetch('https://mainnet.base.org',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:++id,method,params}),signal:AbortSignal.timeout(20000)});
+            if(!response.ok) throw Error('RPC HTTP '+response.status);
+            const data=await response.json();
+            if(data.error) throw Error(JSON.stringify(data.error));
+            if(!Object.hasOwn(data,'result')) throw Error('RPC result missing');
+            return data.result;
+          }
+          const evidence={checkedAt:new Date().toISOString(),wallet,asset:usdc,receiptStatus:'UNKNOWN',spendUsd:0};
+          try{
+            const latest=await rpc('eth_blockNumber',[]);
+            evidence.toBlock=latest;
+            const balance=await rpc('eth_call',[{to:usdc,data:'0x70a08231'+topicWallet.slice(2)},latest]);
+            evidence.balanceAtomic=BigInt(balance).toString();
+            const known=await rpc('eth_getTransactionReceipt',['0xa83d13104d45e00b60f7f846e7b750edd8d243ea68101c6d0390c22e762a6256']);
+            evidence.marketplaceVerificationReceipt=known;
+            const fromBlock='0x'+(51700000).toString(16);
+            evidence.fromBlock=fromBlock;
+            const logs=await rpc('eth_getLogs',[{address:usdc,topics:[transferTopic,null,topicWallet],fromBlock,toBlock:latest}]);
+            if(!Array.isArray(logs)) throw Error('Logs response is not an array');
+            evidence.receiptStatus='COMPLETE_FOR_BLOCK_RANGE';
+            evidence.inbound=logs.map(log=>({tx:log.transactionHash,block:log.blockNumber,logIndex:log.logIndex,removed:log.removed,from:'0x'+log.topics[1].slice(-40),to:'0x'+log.topics[2].slice(-40),atomic:BigInt(log.data).toString()}));
+          }catch(error){evidence.reason=String(error);}
+          console.log(JSON.stringify(evidence));
+          if(evidence.receiptStatus==='UNKNOWN')process.exitCode=1;
+          JS
 
       - name: Verify agent-tools.cloud public card
         if: always()
