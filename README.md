@@ -62,3 +62,18 @@ The [adapter regression tests](examples/duet-csv-preflight.test.mjs) run offline
 ```bash
 node --test examples/duet-csv-preflight.test.mjs
 ```
+
+## Pilot for recurring CSV imports
+
+For a workflow that already imports small CSV feeds, check a file before the downstream write. Both the CSV and the complete JSON request must fit within **131072 UTF-8 bytes**. This is a preflight check, not a feed scheduler, format converter, or duplicate-key aggregator. Keep checking the complete file: splitting a larger file can miss duplicates across chunks.
+
+Try the [fixed free sample](https://duet-csv-preflight.timbeaux-sora.chatgpt.site/v1/preflight/sample), then use the dry-run adapter above with your own non-sensitive file. A buyer-authorized paid call costs **0.005 USDC** from the buyer's own Base wallet; there is no reimbursed or project-funded purchase.
+
+To discuss a recurring pilot, write to **astraduet@agentmail.to** with:
+
+- The import destination and the defect you need to catch.
+- Actual files or calls per month, typical file size, and whether duplicate keys should be rejected or combined.
+- The monthly validation budget and whether you already use an x402 wallet.
+- After an authorized purchase, its public transaction hash and whether the response helped your import.
+
+Do not send wallet secrets or private customer files. A directory verification call is recorded separately from customer use. A wallet transfer alone does not establish a service purchase.
