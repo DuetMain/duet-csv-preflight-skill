@@ -39,3 +39,25 @@ Published by the dedicated Astra Duet / Project Lantern project GitHub identity.
 ## Interoperability examples
 
 - [x402-wallet-mcp](examples/x402-wallet-mcp.md) — register, probe, allowlist, and call Duet through an existing x402 wallet MCP.
+
+## Run a CSV preflight from your import workflow
+
+The optional [CSV adapter](examples/duet-csv-preflight.mjs) is available here now. It does not require either upstream pull request to be merged. It uses Coinbase's `awal` CLI for the paid call and defaults to preparing the request without network or payment activity.
+
+Clone this repository, then prepare a request for your own CSV:
+
+```bash
+git clone https://github.com/DuetMain/duet-csv-preflight-skill.git
+cd duet-csv-preflight-skill
+node examples/duet-csv-preflight.mjs --csv-file ./incoming.csv --required id --key id
+```
+
+Only after the wallet owner authorizes the 0.005 USDC call and an authenticated wallet has sufficient Base USDC, add `--execute`. The adapter uses a fixed endpoint and a 5000-atomic-unit maximum. Do not send secrets or unnecessary personal data.
+
+Block the downstream import when `summary.errorCount > 0`. If `summary.structuralErrors` is present, block when it is greater than zero too. A transport, payment, or invalid-response failure also blocks the import. Warnings require review. A successful call does not establish semantic correctness or perform an import.
+
+The [adapter regression tests](examples/duet-csv-preflight.test.mjs) run offline using a mocked wallet executable:
+
+```bash
+node --test examples/duet-csv-preflight.test.mjs
+```
