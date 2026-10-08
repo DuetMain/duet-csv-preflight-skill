@@ -2,7 +2,7 @@
 import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 
-const ENDPOINT='https://duet-csv-preflight.projectlantern-review.workers.dev/v1/preflight';
+const ENDPOINT='https://duet-csv-preflight.timbeaux-sora.chatgpt.site/v1/preflight';
 const MAX_CSV_BYTES=262144;
 const MAX_USDC_ATOMIC='5000';
 const AWAL_VERSION='2.12.1';
