@@ -104,28 +104,42 @@ jobs:
             echo
           done
 
-      - name: Inspect unsigned live Duet contract without payment
+      - name: Verify public Sites API contract without payment
         if: always()
         shell: bash
         run: |
           python3 - <<'PY'
           import urllib.request, urllib.error, json, base64
-          root='https://duet-csv-preflight.projectlantern-review.workers.dev'
-          probes=[('/health',None),('/openapi.json',None),('/.well-known/x402',None),('/v1/preflight',b'{"csv":"id,name\\n1,Alice\\n","requiredFields":["id"],"keyField":"id"}')]
-          for path,body in probes:
-              req=urllib.request.Request(root+path,data=body,headers={'Content-Type':'application/json'} if body else {},method='POST' if body else 'GET')
-              try:
-                  response=urllib.request.urlopen(req,timeout=30)
-              except urllib.error.HTTPError as e:
-                  response=e
-              except Exception as e:
-                  print(json.dumps({'path':path,'error':type(e).__name__,'message':str(e)}))
-                  continue
-              raw=response.read(30000).decode('utf-8',errors='replace')
-              result={'path':path,'status':response.status,'body':raw}
-              required=response.headers.get('PAYMENT-REQUIRED')
-              if required:
-                  try: result['paymentRequired']=json.loads(base64.b64decode(required))
-                  except Exception as e: result['paymentDecodeError']=str(e)
-              print(json.dumps(result))
+          root='https://duet-csv-preflight.timbeaux-sora.chatgpt.site'
+          results={}
+          for path in ['/health','/openapi.json','/.well-known/x402','/v1/preflight/sample']:
+              req=urllib.request.Request(root+path)
+              response=urllib.request.urlopen(req,timeout=30)
+              assert response.status==200, (path,response.status)
+              results[path]=json.load(response)
+              print(json.dumps({'path':path,'status':response.status,'result':results[path]}))
+          assert results['/health']['version']=='0.1.2'
+          assert results['/openapi.json']['servers'][0]['url']==root
+          assert results['/.well-known/x402']['resources'][0]['url']==root+'/v1/preflight'
+          sample=results['/v1/preflight/sample']['result']
+          assert sample['summary']['dataRecords']==3
+          assert sample['summary']['columns']==2
+          assert sample['counts']['KEY_DUPLICATE']==1
+          assert sample['counts']['FORMULA']==1
+          assert sample['importReady'] is False
+          req=urllib.request.Request(root+'/v1/preflight',data=json.dumps({'csv':'id,name\\n1,Alice\\n','requiredFields':['id'],'keyField':'id'}).encode(),headers={'Content-Type':'application/json'},method='POST')
+          try:
+              response=urllib.request.urlopen(req,timeout=30)
+          except urllib.error.HTTPError as error:
+              response=error
+          assert response.status==402, response.status
+          challenge=json.loads(base64.b64decode(response.headers['PAYMENT-REQUIRED']))
+          assert challenge['x402Version']==2
+          assert challenge['resource']['url']==root+'/v1/preflight'
+          accept=challenge['accepts'][0]
+          assert accept['amount']=='5000'
+          assert accept['network']=='eip155:8453'
+          assert accept['payTo']=='0xa9a52a066e342e2ED2488BBdb9fAd95EFd3D9FD4'
+          assert accept['asset']=='0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+          print(json.dumps({'path':'/v1/preflight','status':response.status,'paymentRequired':challenge,'verification':'PASS_UNPAID_ONLY'}))
           PY
