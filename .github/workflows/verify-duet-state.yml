@@ -92,3 +92,28 @@ jobs:
             head -c 5000 /tmp/m402
             echo
           done
+
+      - name: Inspect unsigned live Duet contract without payment
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import urllib.request, urllib.error, json, base64
+          root='https://duet-csv-preflight.projectlantern-review.workers.dev'
+          probes=[('/health',None),('/openapi.json',None),('/.well-known/x402',None),('/v1/preflight',b'{"csv":"id,name\\n1,Alice\\n","requiredFields":["id"],"keyField":"id"}')]
+          for path,body in probes:
+              req=urllib.request.Request(root+path,data=body,headers={'Content-Type':'application/json'} if body else {},method='POST' if body else 'GET')
+              try:
+                  response=urllib.request.urlopen(req,timeout=30)
+              except urllib.error.HTTPError as e:
+                  response=e
+              except Exception as e:
+                  print(json.dumps({'path':path,'error':type(e).__name__,'message':str(e)}))
+                  continue
+              raw=response.read(30000).decode('utf-8',errors='replace')
+              result={'path':path,'status':response.status,'body':raw}
+              required=response.headers.get('PAYMENT-REQUIRED')
+              if required:
+                  try: result['paymentRequired']=json.loads(base64.b64decode(required))
+                  except Exception as e: result['paymentDecodeError']=str(e)
+              print(json.dumps(result))
+          PY
