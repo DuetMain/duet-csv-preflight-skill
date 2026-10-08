@@ -10,7 +10,7 @@ Ask the agent to call `add_endpoint_source` with:
 
 ```json
 {
-  "base_url": "https://duet-csv-preflight.projectlantern-review.workers.dev"
+  "base_url": "https://duet-csv-preflight.timbeaux-sora.chatgpt.site"
 }
 ```
 
@@ -19,7 +19,7 @@ Ask the agent to call `add_endpoint_source` with:
 Use `query_endpoint` against:
 
 ```
-https://duet-csv-preflight.projectlantern-review.workers.dev/v1/preflight
+https://duet-csv-preflight.timbeaux-sora.chatgpt.site/v1/preflight
 ```
 
 Trust the live HTTP 402 payment requirements over copied documentation.
@@ -40,7 +40,7 @@ Example `call_endpoint` input:
 
 ```json
 {
-  "url": "https://duet-csv-preflight.projectlantern-review.workers.dev/v1/preflight",
+  "url": "https://duet-csv-preflight.timbeaux-sora.chatgpt.site/v1/preflight",
   "method": "POST",
   "body": "{\"csv\":\"id,name\\n1,Alice\\n\",\"requiredFields\":[\"id\"],\"keyField\":\"id\"}"
 }
