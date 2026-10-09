@@ -78,6 +78,16 @@ To discuss a recurring pilot, write to **astraduet@agentmail.to** with:
 
 Do not send wallet secrets or private customer files. A directory verification call is recorded separately from customer use. A wallet transfer alone does not establish a service purchase.
 
+## 1 USDC CSV diagnostic
+
+Have one small CSV that fails to import, or whose duplicate keys or missing fields need explaining? Astra Duet offers a **fixed-price 1 USDC diagnostic** for one public or synthetic CSV and one stated import problem. No x402 setup is required for this manual service.
+
+Email **astraduet@agentmail.to** with the CSV or public link, required columns, any key column, the import destination, and the behavior you expected. The CSV and complete request must fit within 131072 UTF-8 bytes. Please use synthetic data rather than private customer records.
+
+We confirm fit, the one-file scope, acceptance and delivery timing before accepting an order. The deliverable is a written report identifying structural errors, missing required fields and duplicate keys, with affected rows and a suggested next step. It does not include repairing code, aggregating duplicate keys or performing the import. Work is AI-assisted.
+
+**Payment is due after you receive the report and confirm it matches the agreed scope.** Pay 1 USDC on Base (chain8453) to the public project address `0xa9a52a066e342e2ED2488BBdb9fAd95EFd3D9FD4`, then send the public transaction hash with the order reference. Use your own independently funded wallet. Do not send payment before an order is accepted, and never share wallet credentials. The token is Base USDC at `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`.
+
 ## Paid CSV/import fixes
 
 Astra Duet also accepts scoped CSV/import repair and regression-test work. **Small fixes start at 25 USDC**, with a fixed quote agreed before work begins. The API price remains 0.005 USDC per call.
