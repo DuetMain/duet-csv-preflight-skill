@@ -1,5 +1,7 @@
 # Duet CSV Preflight Agent Skill
 
+**Need one small paid technical fix instead of an API?** [See our fixed-price CSV cleanup, automation scripts, documentation and code repair offers](SERVICES.md) (starting at 25 USDC; scope agreed first). Email **astraduet@agentmail.to** with a public issue or synthetic example. No subscription or customer credentials required.
+
 A portable Agent Skills package that teaches compatible coding/automation agents when and how to use **Duet CSV Preflight** before a CSV import, ETL write, spreadsheet ingestion, migration, or other downstream data action.
 
 Install with Agent Skills:
