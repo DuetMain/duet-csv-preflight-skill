@@ -13,6 +13,16 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+      - name: Independently verify the submitted public signature
+        run: |
+          npm install --no-save --silent ethers@6
+          node - <<'JS'
+          const {verifyMessage}=require('ethers');
+          const task='0x30a3d7666614a356ae2a149159d604a7e12a4454e32ac25b65b6823a17d3e524';
+          const sig='0x9f324345c252d10165379e2db987f5a18ea409ccf820f21c9aefbfd62595493a512f4cabadc579470bb98b133b593b5873ad70ed72a87eb556baf75aeebe7cdd1c';
+          const addr=verifyMessage('taskmarket:submit:'+task,sig);
+          console.log('Ethers recovered address:',addr);
+          JS
       - name: Verify task still open and submit once
         env:
           TASK_ID: "0x30a3d7666614a356ae2a149159d604a7e12a4454e32ac25b65b6823a17d3e524"
