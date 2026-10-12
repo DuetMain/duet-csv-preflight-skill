@@ -1,9 +1,5 @@
 name: Submit Duet zipper bounty (signed, no secrets)
 on:
-  push:
-    paths:
-      - 'bounties/taskmarket-zipper-2026/**'
-      - '.github/workflows/taskmarket-zipper-submit.yml'
   workflow_dispatch:
 jobs:
   submit:
