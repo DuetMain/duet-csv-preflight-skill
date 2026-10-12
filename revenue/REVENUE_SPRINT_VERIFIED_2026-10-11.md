@@ -97,3 +97,36 @@ Pursue a **buyer-originated** exclusive task that has a confirmed payer, specifi
 ### Actionable next boundary
 
 For *personal cents earned with user's own truthful opinions*, user can use Qmee or 1Q directly; receipt must be verified in their own payout account before counting even *personal* earnings. These platforms do not pay Duet for agent-created answers. For *Duet organic revenue*, focus on independently funded buyer technical jobs with owner-authorized access, verified completion and an independent settled payment. Keep the ledgers distinct. No new scheduled tasks, no unauthorized spend, no credential sharing.
+
+
+## Continued cash-first sprint — Oct 11 local / Oct 12 UTC (commit after 6e3c6ab)
+
+**Settled independent revenue: $0 USD / $0 USDC; new spending: $0; accepted buyer contracts: none established; new bounty awards: none; no new trades, scheduled tasks, or survey accounts.** This is a read-only opportunity investigation, not earnings.
+
+### Reconciled project evidence
+
+- Re-verified source record and `.github/workflows/taskmarket-zipper-submit.yml`. The unsafe Taskmarket legacy submission workflow remains disabled (blob `671cb40009fd40f1569d15297c5c4456e394a45f`); do not change or replay a signature.
+- [Taskmarket support issue #66](https://github.com/daydreamsai/skills-market/issues/66): only preexisting comments and DuetMain's [diagnostic comment](https://github.com/daydreamsai/skills-market/issues/66#issuecomment-6117336044); no new maintainer reply, supported authentication fix, submission receipt, or award.
+- Fresh Project Lantern Gmail and project `astraduet@agentmail.to`, `webfix@agentmail.to`, and `duetimportcheck@agentmail.to` checks show no newly verified customer order or payout. Recent mail observed contains Railway welcome notices and previously known delivery-failure bounces, not money.
+- Read-only Base Blockscout [ERC-20 transfer feed](https://base.blockscout.com/api/v2/addresses/0xa9a52a066e342e2ED2488BBdb9fAd95EFd3D9FD4/token-transfers?type=ERC-20) still lists four historical 0.005 USDC receipts, latest **2026-10-08T06:25:43Z**. These 0.02 USDC historical internal/unattributed receipts are **not** independently earned customer revenue.
+- Current [ArcBounty open jobs](https://arcbounty.app/api/v1/bounties?status=open) = 0; [Execution Market available jobs](https://api.execution.market/api/v1/tasks/available) = 0. BasedAgents live open listing returned 20, only escrow-funded entry title `Test hire (please ignore)`, hence expressly excluded.
+
+### Fresh real-platform screening, no assignments
+
+- Official [Railway bounty program](https://docs.railway.com/community/bounties) is an actual $10-on-success route, not a fixed-pay proposal. Found [an active-looking production webhook routing question](https://station.railway.com/questions/production-custom-domain-post-webhook-re-7448f71e) whose original poster shows zero replies and a $10 bounty. No evidence of an independently verified fix, no authorized current Railway Station posting session, and no acceptance; **did not claim/send**. Search results sometimes show *Solved* even with '0 Replies'; always read page status and payout rules before acting.
+- [0penEx public board](https://0penex.com/) reported 230 listed opportunities (11 Superteam Earn, 169 Immunefi and 50 GitHub in snapshot). Source itself warns that Superteam amounts are shared prize pools, Immunefi amounts are maximum hypothetical security awards, and GitHub labels do not prove funding. This is **not 230 qualified cash jobs**. No Duet application submitted.
+- First-party Superteam API `/api/listings?context=home&tab=Bounties&category=All`, and Development, Content, Other, Design variants: in the first 10 live entries from **each** category, every entry's `agentAccess` was `HUMAN_ONLY`. Do not enroll/substitute Duet for a human; this limited sample does not claim all platform listings are human-only.
+- Superteam [projects vs. bounties FAQ](https://docs.superteam.fun/the-superteam-handbook/community/faqs/superteam-earn-faq): projects select a single freelancer; bounties are open competitions. Public page advertises a `Manual QA Tester - Sana.run Trading Terminal` $50-250 USDC project, but the actual listing details, agent eligibility, submission mechanism and available buyer assignment were not independently established via supported connected-account tools. Therefore **prospect only, not revenue or awarded contract**.
+- [Superteam $200 Agentic Engineering Grant](https://superteam.fun/earn/grants/agentic-engineering/) explicitly shows **Applications Paused**, requires human verification, Solana application, coding subscription receipts and later proof of product shipment; not a zero-spend Duet pay source at present.
+- [Algora's stale-bounty tracking problem](https://github.com/algora-io/algora/issues/213) has been publicly documented. Current advertised statuses can differ from GitHub, sponsorship may be conditional, and some listings have high claim saturation. Do not spend development effort on any without validating issue, payout and competition.
+
+### Human micropayments (kept outside Duet revenue)
+
+- [1Q official payments](https://support.1q.com/hc/en-us/articles/360057076311-How-are-respondents-paid): up to 25 cents per eligible question sent via phone app or SMS, PayPal promptly after response. [Official help](https://support.1q.com/hc/en-us/articles/360056656032-Why-didn-t-I-get-paid-for-answering-a-question) identifies missed deadlines and unpaid `Know` Freevert questions: *not every question pays*. Registration requires a real participant phone, email, and personal payout account, none authorized/accessed here. Frequency is not guaranteed.
+- [Qmee U.S. FAQ](https://www.qmee.com/en-us/faq): PayPal/Venmo no-minimum withdrawal, but participant must take real surveys on their own account; rewards depend on provider qualification, no guarantee.
+- [Prolific official AI use rule](https://participant-help.prolific.com/en/articles/445029-can-i-use-ai-assistance-tools-in-my-submission) forbids AI in responses unless specifically invited by the researcher. No compliant supported route to import 10 paid questions into chat was found. Do not fake respondent identity, copy proprietary survey material or invent earnings.
+- Personal human survey payouts, if any, are *user earnings*. Subsequent optional investment into Duet is *owner capital*, never **independently earned Duet revenue**.
+
+### Decision
+
+No current candidate checked passed all gates: independent identified buyer, real funded scope, current assignment eligibility, supported project-account submission and verified payout without unauthorized cost. Preserve security and $0 spend. For another run, prioritize a **single approved exclusive buyer assignment** or confirmed authorized Railway help forum session. For personal cents, use genuine 1Q/Qmee manually rather than an agent impersonation workflow.
