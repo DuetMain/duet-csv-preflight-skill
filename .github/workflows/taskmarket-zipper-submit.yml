@@ -1,62 +1,16 @@
-name: Submit Duet zipper bounty (signed, no secrets)
+# The former submission workflow embedded a public reusable signature.
+# Retired pending a securely provisioned, recoverable Duet worker identity,
+# current operator-approved Taskmarket legal receipt, and tested API auth.
+# Original artwork remains in bounties/taskmarket-zipper-2026.
+name: Taskmarket zipper - submission disabled pending authenticated signer
 on:
   workflow_dispatch:
 jobs:
-  submit:
+  disabled:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
-    permissions:
-      contents: read
     steps:
-      - uses: actions/checkout@v4
-      - name: Independently verify the submitted public signature
+      - name: Explain why submission cannot run
         run: |
-          npm install --no-save --silent ethers@6
-          node - <<'JS'
-          const {verifyMessage}=require('ethers');
-          const task='0x30a3d7666614a356ae2a149159d604a7e12a4454e32ac25b65b6823a17d3e524';
-          const sig='0x9f324345c252d10165379e2db987f5a18ea409ccf820f21c9aefbfd62595493a512f4cabadc579470bb98b133b593b5873ad70ed72a87eb556baf75aeebe7cdd1c';
-          const addr=verifyMessage('taskmarket:submit:'+task,sig);
-          console.log('Ethers recovered address:',addr);
-          JS
-      - name: Verify task still open and submit once
-        env:
-          TASK_ID: "0x30a3d7666614a356ae2a149159d604a7e12a4454e32ac25b65b6823a17d3e524"
-          WORKER: "0xc6CE5965872f6D1813B276955B8A6e7517F8bF78"
-          SIGNATURE: "0x9f324345c252d10165379e2db987f5a18ea409ccf820f21c9aefbfd62595493a512f4cabadc579470bb98b133b593b5873ad70ed72a87eb556baf75aeebe7cdd1c"
-        run: |
-          python3 - <<'PY'
-          import os,base64,json,urllib.request,urllib.error,sys
-          task=os.environ['TASK_ID']
-          who=os.environ['WORKER']
-          base='https://api.taskmarket.dev'
-          def request(url,body=None):
-              data=None if body is None else json.dumps(body).encode()
-              req=urllib.request.Request(base+url,data=data,headers={'Accept':'application/json','Content-Type':'application/json'},method='GET' if data is None else 'POST')
-              with urllib.request.urlopen(req, timeout=35) as resp:
-                  return json.loads(resp.read().decode())
-          try:
-              task_info=request('/api/tasks/'+task)
-              status=task_info.get('status') or task_info.get('task',{}).get('status')
-              print('Task status:', status)
-              if status!='open':
-                  raise RuntimeError('Task no longer open')
-              previous=request('/api/submissions/mine?workerAddress='+who)
-              rows=previous if isinstance(previous,list) else previous.get('submissions',previous.get('data',[]))
-              if any(t.get('taskId','').lower()==task.lower() for t in rows):
-                  print('Existing submission found; refusing duplicate')
-                  sys.exit(0)
-              file_path='bounties/taskmarket-zipper-2026/duet_zipper_slider_explained.svg'
-              data=open(file_path,'rb').read()
-              assert len(data)<500000
-              payload={'taskId':task,'workerAddress':who,'signature':os.environ['SIGNATURE'],'artifacts':[{'fileName':'duet_zipper_slider_explained.svg','mimeType':'image/svg+xml','role':'final','file':base64.b64encode(data).decode()}]}
-              result=request('/api/tasks/'+task+'/submissions',payload)
-              print('Submission result:',json.dumps(result))
-              if not result.get('success'):
-                  raise RuntimeError('API did not confirm success')
-          except urllib.error.HTTPError as e:
-              print('HTTP failure',e.code, e.read().decode()[:3000])
-              sys.exit(1)
-          except Exception as e:
-              print('Submission failed:',str(e));sys.exit(1)
-          PY
+          echo "This legacy submission workflow is disabled to avoid replaying an exposed signature."
+          echo "Use the current first-party Taskmarket CLI with a wallet owned by the project and operator-approved legal acceptance."
+          exit 1
