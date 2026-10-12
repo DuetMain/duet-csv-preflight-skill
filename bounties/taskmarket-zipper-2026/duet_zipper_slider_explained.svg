@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="820" viewBox="0 0 1200 820" role="img" aria-labelledby="ttl desc">
+<title id="ttl">The tiny junction inside a zipper - original explainer</title>
+<desc id="desc">An open-to-closed zipper and enlarged Y-channel showing separate left and right teeth joining into a meshed chain. Upward slider motion closes; downward motion opens. Simplified and not to scale.</desc>
+<metadata>Original schematic, Duet, October 2026. Manufacturer source https://www.ykk.com/english/ykk/tech/01.html establishes tapes, meshing elements, slider, Y-shaped tunnel, closing up/opening down. Patent source https://patents.google.com/patent/US20120042433A1/en describes the Y-shaped channel and interlocking engagement. No source artwork or prose copied.</metadata>
+<defs><linearGradient id="bg" x2="0" y2="1"><stop stop-color="#101b30"/><stop offset="1" stop-color="#182d40"/></linearGradient><linearGradient id="metal" x2="0" y2="1"><stop stop-color="#eaf0f6"/><stop offset=".47" stop-color="#97aac4"/><stop offset="1" stop-color="#536e91"/></linearGradient><marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#66e0d0"/></marker><marker id="b" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#ffbe69"/></marker></defs>
+<style>text{font-family:Arial,sans-serif;fill:#edf6ff}.dim{fill:#afc4d8}.sm{font-size:16px}.hd{font-size:22px;font-weight:bold}.label{font-size:17px;font-weight:bold}.dark{fill:#21384e}</style>
+<rect width="1200" height="820" fill="url(#bg)"/><text x="48" y="66" font-weight="bold" font-size="35">THE TINY JUNCTION INSIDE A ZIPPER</text><text x="48" y="94" class="dim" font-size="18">One moving slider. Two fabric tapes. Interlocking teeth.</text>
+<rect x="42" y="119" width="540" height="559" rx="18" fill="#263c53" stroke="#69849f"/><rect x="607" y="119" width="551" height="559" rx="18" fill="#263c53" stroke="#69849f"/>
+<text x="67" y="158" class="hd">A. THE ZIPPER ON FABRIC</text><text x="632" y="158" class="hd">B. INSIDE THE SLIDER</text><text x="68" y="188" class="sm dim">Top open; bottom interlocked</text><text x="632" y="188" class="sm dim">Enlarged interior guiding channel</text>
+<rect x="197" y="224" width="81" height="403" rx="10" fill="#237e87"/><rect x="351" y="224" width="80" height="403" rx="10" fill="#9a6035"/><path d="M232 228V620M391 228V620" stroke="#e6e8da" stroke-opacity=".55" stroke-width="2" stroke-dasharray="6 6"/>
+<rect x="275" y="237" width="19" height="8" rx="3" fill="#68e1d3"/><rect x="335" y="237" width="18" height="8" rx="3" fill="#ffbe69"/>
+<rect x="275" y="253" width="19" height="8" rx="3" fill="#68e1d3"/><rect x="335" y="253" width="18" height="8" rx="3" fill="#ffbe69"/>
+<rect x="275" y="269" width="19" height="8" rx="3" fill="#68e1d3"/><rect x="335" y="269" width="18" height="8" rx="3" fill="#ffbe69"/>
+<rect x="275" y="285" width="19" height="8" rx="3" fill="#68e1d3"/><rect x="335" y="285" width="18" height="8" rx="3" fill="#ffbe69"/>
+<rect x="275" y="301" width="19" height="8" rx="3" fill="#68e1d3"/><rect x="335" y="301" width="18" height="8" rx="3" fill="#ffbe69"/>
+<rect x="275" y="317" width="19" height="8" rx="3" fill="#68e1d3"/><rect x="335" y="317" width="18" height="8" rx="3" fill="#ffbe69"/>
+<rect x="275" y="333" width="19" height="8" rx="3" fill="#68e1d3"/><rect x="335" y="333" width="18" height="8" rx="3" fill="#ffbe69"/>
+<rect x="275" y="349" width="19" height="8" rx="3" fill="#68e1d3"/><rect x="335" y="349" width="18" height="8" rx="3" fill="#ffbe69"/>
+<rect x="275" y="365" width="19" height="8" rx="3" fill="#68e1d3"/><rect x="335" y="365" width="18" height="8" rx="3" fill="#ffbe69"/>
+<path d="M277 460h38q6 0 6 5v3h-44Z" fill="#68e1d3" stroke="#1b6972"/>
+<path d="M351 475h-38q-6 0-6 5v3h44Z" fill="#ffbe69" stroke="#9a672e"/>
+<path d="M277 490h38q6 0 6 5v3h-44Z" fill="#68e1d3" stroke="#1b6972"/>
+<path d="M351 505h-38q-6 0-6 5v3h44Z" fill="#ffbe69" stroke="#9a672e"/>
+<path d="M277 520h38q6 0 6 5v3h-44Z" fill="#68e1d3" stroke="#1b6972"/>
+<path d="M351 535h-38q-6 0-6 5v3h44Z" fill="#ffbe69" stroke="#9a672e"/>
+<path d="M277 550h38q6 0 6 5v3h-44Z" fill="#68e1d3" stroke="#1b6972"/>
+<path d="M351 565h-38q-6 0-6 5v3h44Z" fill="#ffbe69" stroke="#9a672e"/>
+<path d="M277 580h38q6 0 6 5v3h-44Z" fill="#68e1d3" stroke="#1b6972"/>
+<path d="M351 595h-38q-6 0-6 5v3h44Z" fill="#ffbe69" stroke="#9a672e"/>
+<path d="M277 610h38q6 0 6 5v3h-44Z" fill="#68e1d3" stroke="#1b6972"/>
+<path d="M280 365H350Q364 365 359 381L341 445Q338 457 329 457H301Q292 457 289 445L271 381Q267 365 280 365Z" fill="url(#metal)" stroke="#edf6ff" stroke-width="3"/>
+<path d="M286 376H343L330 421L313 439L298 421Z" fill="#405a77"/><path d="M292 384L313 404L338 384" stroke="#dce9f6" stroke-width="5" fill="none"/><rect x="302" y="347" width="25" height="44" rx="11" fill="#e5eff6" stroke="#72869e" stroke-width="3"/><circle cx="315" cy="359" r="5" fill="#36516c"/>
+<path d="M349 399L626 341" fill="none" stroke="#9db7ce" stroke-width="2" stroke-dasharray="8 7"/><circle cx="349" cy="399" r="4" fill="white"/><circle cx="626" cy="341" r="4" fill="white"/>
+<path d="M145 457V330" fill="none" stroke="#66e0d0" stroke-width="5" marker-end="url(#a)"/><path d="M471 353V471" fill="none" stroke="#ffbe69" stroke-width="5" marker-end="url(#b)"/>
+<text x="71" y="320" class="label">CLOSE</text><text x="71" y="341" class="sm">Slider UP</text><text x="454" y="499" class="label">OPEN</text><text x="449" y="520" class="sm">Slider DOWN</text>
+<path d="M236 251L158 243H89M343 267L460 267H503M324 445L385 548H469" fill="none" stroke="#aabbd0" stroke-width="2"/>
+<text x="68" y="231" class="label">TAPE</text><text x="444" y="254" class="label">TEETH</text><text x="394" y="570" class="label">SLIDER</text>
+<rect x="79" y="588" width="444" height="60" rx="10" fill="#102639" stroke="#507087"/><circle cx="100" cy="607" r="6" fill="#66e0d0"/><text x="114" y="611" class="sm">Teal: left row</text><circle cx="276" cy="607" r="6" fill="#ffbe69"/><text x="289" y="611" class="sm">Amber: right row</text><text x="99" y="635" class="dim" font-size="14">Arrows show slider motion relative to stationary tape.</text>
+<path d="M762 253C811 256 830 293 864 339L894 391L915 406L937 391L965 339C1000 292 1019 256 1067 253M915 406V581" stroke="#8195b0" stroke-width="11" fill="none" stroke-linecap="round"/>
+<path d="M790 250C836 259 850 314 891 374C910 401 909 429 909 452L909 580" stroke="#66e0d0" stroke-width="23" stroke-linecap="round" fill="none"/>
+<path d="M1038 250C992 259 980 314 941 374C923 401 921 429 921 452L921 580" stroke="#ffbe69" stroke-width="23" stroke-linecap="round" fill="none"/>
+<path d="M800 270h11" stroke="#154e54" stroke-width="5" stroke-linecap="round"/><path d="M1030 270h-11" stroke="#8a552b" stroke-width="5" stroke-linecap="round"/>
+<path d="M817 291h11" stroke="#154e54" stroke-width="5" stroke-linecap="round"/><path d="M1014 291h-11" stroke="#8a552b" stroke-width="5" stroke-linecap="round"/>
+<path d="M833 312h11" stroke="#154e54" stroke-width="5" stroke-linecap="round"/><path d="M997 312h-11" stroke="#8a552b" stroke-width="5" stroke-linecap="round"/>
+<path d="M850 333h11" stroke="#154e54" stroke-width="5" stroke-linecap="round"/><path d="M981 333h-11" stroke="#8a552b" stroke-width="5" stroke-linecap="round"/>
+<path d="M866 354h11" stroke="#154e54" stroke-width="5" stroke-linecap="round"/><path d="M964 354h-11" stroke="#8a552b" stroke-width="5" stroke-linecap="round"/>
+<path d="M918 430h-14" stroke="#09636b" stroke-width="5" stroke-linecap="round"/>
+<path d="M911 447h14" stroke="#985d25" stroke-width="5" stroke-linecap="round"/>
+<path d="M918 464h-14" stroke="#09636b" stroke-width="5" stroke-linecap="round"/>
+<path d="M911 481h14" stroke="#985d25" stroke-width="5" stroke-linecap="round"/>
+<path d="M918 498h-14" stroke="#09636b" stroke-width="5" stroke-linecap="round"/>
+<path d="M911 515h14" stroke="#985d25" stroke-width="5" stroke-linecap="round"/>
+<path d="M918 532h-14" stroke="#09636b" stroke-width="5" stroke-linecap="round"/>
+<path d="M911 549h14" stroke="#985d25" stroke-width="5" stroke-linecap="round"/>
+<circle cx="915" cy="405" r="31" fill="none" stroke="#edf6ff" stroke-dasharray="5 6"/>
+<path d="M785 220H700M1040 220H1105" stroke="#aabbd0" fill="none"/><text x="663" y="215" class="sm">Left row</text><text x="1036" y="215" class="sm">Right row</text>
+<path d="M963 399L1023 426H1098" fill="none" stroke="#b1c2d5"/><text x="1026" y="450" class="label">Y-CHANNEL</text>
+<text x="651" y="482" class="sm">Two rows enter</text><text x="651" y="504" class="sm">separate forks.</text><text x="992" y="537" class="sm">One interlocked</text><text x="992" y="559" class="sm">chain exits.</text>
+<rect x="857" y="599" width="120" height="31" rx="10" fill="#102637" stroke="#798ba2"/><text x="866" y="621" class="sm">Joined chain</text>
+<text x="642" y="651" class="sm dim">Fixed-slider view: colored paths trace teeth through</text><text x="642" y="670" class="sm dim">the channel; the motion arrows appear in panel A.</text>
+<text x="1140" y="670" text-anchor="end" font-size="13">NOT TO SCALE</text>
+<rect x="42" y="687" width="1116" height="121" rx="14" fill="#eef4f9"/>
+<text x="63" y="717" class="dark" font-size="19" font-weight="bold">HOW IT WORKS</text>
+<text x="63" y="745" class="dark" font-size="17">Each fabric tape carries a row of shaped teeth. Moving the slider upward along the tapes closes the zipper:</text>
+<text x="63" y="770" class="dark" font-size="17">its Y-shaped channel guides the two separate rows together so their teeth interlock. Moving the slider</text>
+<text x="63" y="796" class="dark" font-size="17">downward reverses that path and separates the rows. This drawing is simplified and not to scale.</text></svg>
