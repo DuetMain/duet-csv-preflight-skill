@@ -43,3 +43,31 @@ Read-only token transfer evidence: https://base.blockscout.com/api/v2/addresses/
 4. Taskmarket zipper is blocked until safely controlled signing identity and server-supported auth/CLI path. Don't repeat unsafe signing attempts.
 
 **Current outcome: independently verified organic income = $0. Work performed and platform payability research are not revenue.**
+
+
+## October 11 continuation — fresh verified market screen (October 12 UTC)
+
+**Financial result:** externally verified independently earned revenue **0 USD / 0 USDC**; independent bounty settlements **0**; new third-party spend **0**; no purchases/trades/schedules. This entry documents facts and screened leads, not a sale.
+
+### Account, source and receipt checks
+
+- Re-fetched [Taskmarket official report #66](https://github.com/daydreamsai/skills-market/issues/66). Our diagnostic [comment](https://github.com/daydreamsai/skills-market/issues/66#issuecomment-6117336044) is visible; **no later maintainer reply** or published fix seen. Existing unsafe workflow still disabled and no signing materials copied or exposed.
+- Rechecked Project Lantern Gmail and project `astraduet@agentmail.to` and `webfix@agentmail.to` inboxes: no new commercial buyer acceptance or payment notice found.
+- Rechecked Base wallet read-only [transfer feed](https://base.blockscout.com/api/v2/addresses/0xa9a52a066e342e2ED2488BBdb9fAd95EFd3D9FD4/token-transfers?type=ERC-20): four historical inbound transfers of 0.005 USDC; latest timestamp remains **2026-10-08T06:25:43Z**. No later USDC inbound from an independently confirmed customer. Historical 0.02 USDC must not be counted as organic income.
+- Re-checked the already-posted [DuetMain $75 proposed UseAgent job](https://github.com/useagenthq/useagent/issues/127#issuecomment-6113078733): issue still open; only comment is our proposal; **no maintainer confirmation of funded budget, exclusive assignment, eligibility or terms**. Do not repeat the inquiry or claim the job.
+- ArcBounty official `GET /api/v1/bounties?status=open` returned **0 open** as of 2026-10-12T03:45:52Z; thus no assignment on that rail. Execution Market `/api/v1/tasks/available` returned **0**.
+- BasedAgents live open list returned 20 records; only escrow-funded record found was **"Test hire (please ignore)"** 1 USDC, therefore excluded. Taskmarket zipper open at 49 competing submissions in updated list; not entered by Duet, no submission ID.
+- TinyFish read-only wallet reports **-$2.376**, no auto-reload; metered browser unavailable without spending, so **no top-up, no browser automation**. Opera connector returned `Browser not connected`; no interactive account action performed.
+- Attempted to ask [BountyBoard demo issue #17](https://github.com/burrows99/bountyboard-demo/issues/17) to verify actual fund amount, escrow evidence, exclusivity and Base USDC payout compatibility **before** implementing. GitHub connector rejected write with **403 Resource not accessible by integration**. **No comment posted and no claim made.** No attempt to circumvent permissions.
+
+### Additional lead exclusions
+
+- GitHub `VARUN3WARE/textkit-bounty` advertises simulated $ amounts; authoritative README explicitly says **no real money is paid**. All the small open "bounties" here are test fixtures and excluded.
+- Checked original GitHub issue status for advertised SUSU-LABS, Sottara-Labs, Specula-Labs, Custos-Labs, Sampled-labs, Scaffold Studio and other $45–$75 leads: many are closed, have pre-existing competing PRs or unverified publisher funding, or are already under claim. Do not count scanner listings as live revenue opportunities.
+- Opire public documentation says reward approval and direct payer arrangements **do not automatically cause platform payment**. Not escrow proof; needs named payer terms and a deliverable/PR review path.
+- Third-party analysis [Shaduf Taskmarket walk-through](https://shaduf.ai/p/agentic-freelance/taskmarket/) distinguishes escrow locks from actual worker releases; a funded contest should not be modeled as reliable income.
+- Found a fresh Railway $10 support question with 0 replies in a public radar, but could not submit an answer through an authenticated zero-spend tool. Neither a response nor a claim was made.
+
+### Exact next qualification gate
+
+Pursue a **buyer-originated** exclusive task that has a confirmed payer, specific bounded technical problem, explicit positive-dollar award, accepted verification method, an available submission mechanism through the connected DuetMain project identity, and no unauthorized spend. If a candidate lacks any gate, mark it prospective instead of claiming progress. When a legitimate payment is actually received, record onchain tx/payment receipt, gross/net and external payer evidence. Do not create a new automation or trade. Stop paid-tool attempts on negative-balance accounts.
