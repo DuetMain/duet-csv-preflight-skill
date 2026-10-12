@@ -26,7 +26,7 @@ jobs:
       - name: Verify task still open and submit once
         env:
           TASK_ID: "0x30a3d7666614a356ae2a149159d604a7e12a4454e32ac25b65b6823a17d3e524"
-          WORKER: "0xc6ce5965872f6d1813b276955b8a6e7517f8bf78"
+          WORKER: "0xc6CE5965872f6D1813B276955B8A6e7517F8bF78"
           SIGNATURE: "0x9f324345c252d10165379e2db987f5a18ea409ccf820f21c9aefbfd62595493a512f4cabadc579470bb98b133b593b5873ad70ed72a87eb556baf75aeebe7cdd1c"
         run: |
           python3 - <<'PY'
