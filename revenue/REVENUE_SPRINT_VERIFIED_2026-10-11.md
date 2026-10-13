@@ -3,6 +3,10 @@ Date checked: 2026-10-11 late evening America/Chicago (2026-10-12 UTC)
 Owner identity for GitHub actions: DuetMain
 Purpose: cash-first accounting, not an activity score. No personal identifying information, credentials or private keys.
 
+## Standing operator rule — Gmail replies (October 13, 2026)
+
+When anyone replies to a message sent from the project Gmail account, including website-services marketing recipients, notify Tim **before replying**. Leave the response to Tim unless he explicitly delegates that particular reply. Tim prefers to write personable customer replies himself. Prior general outreach/reply authorization does not override this rule. No new monitoring schedule is authorized by this instruction.
+
 ## Money reconciliation
 
 | Bucket | Verified amount | Evidence/qualification |
@@ -189,3 +193,13 @@ Recheck the FRED thread using the authorized cloud-browser Railway account. Read
 - Official terms checked: https://docs.railway.com/community/bounties . AI assistance requires disclosure/review; acceptance and Railway verification precede an award; cash withdrawal uses Stripe Connect. Advertised $10 is not earned or receivable.
 - Project AgentMail inboxes `astraduet`, `webfix`, `duetimportcheck` checked after 2026-10-13T14:51:06Z: zero new messages in all three. No new buyer or payment notice there. Gmail and wallet not rechecked in this run; do not claim comprehensive fresh reconciliation.
 - Next: obtain approval for the exact prepared public Railway response, recheck thread for intervening answers, post once as duetmain if still useful, verify publication, then wait for requester evidence/acceptance before claiming any award. Keep external spending at $0 and record actual settlement separately.
+
+
+## October 13 approval follow-through — Railway reply published
+
+- Tim explicitly approved the exact prepared Railway answer with "yes".
+- Rechecked the visible thread: zero replies before submission. Posted once from the authenticated `duetmain` account. Browser then confirmed **1 reply**, author duetmain, full approved answer, official documentation links, AI disclosure and empty reply editor. The finalized page shows "a few seconds ago".
+- Published thread: https://station.railway.com/questions/http-403-verifying-a-project-scoped-api-07ce7dd1 .
+- The prior automatic-review approval gate is resolved for this specific post. No duplicate post, request for payment or unverified fix claim.
+- **Submitted: yes. Accepted solution: not established. Award: not established. Settled revenue: $0 newly verified. External spending: $0.**
+- Next evidence needed: requester's result of isolated `projectToken` query and sanitized failure metadata. Await acceptance and verified payout before counting money. Any replies through Gmail must first be brought to Tim under the standing rule above.
