@@ -171,3 +171,21 @@ Use an **authorized Railway Central Station browser session in ChatGPT Work** to
 ### Next continuation
 
 Recheck the FRED thread using the authorized cloud-browser Railway account. Read new owner evidence before answering; resolve the HTTP 400 from its sanitized error, avoid repeating prior diagnostics, and disclose AI assistance. Count revenue only after accepted solution, verified Railway award and actual settlement. Spend $0; no trades, new schedules or credential exposure. Keep this shared record updated.
+
+
+## October 13, 2026 — payout identity correction and fresh Railway draft
+
+**New verified organic revenue: $0.00. New external spending: $0.00. No trade, new schedule, wallet transaction or published bounty answer in this run.**
+
+- Corrected prior conversational wording that Duet "lost" the zipper contest. The repository's submission record establishes **UNSUBMITTED**, HTTP 401, no submission receipt. No later successful submission is established. Do not describe this as an accepted contest entry or a judged loss.
+- Taskmarket task TSK-04MK0H0G is now Completed, with 109 submissions. Public settlement identifies **UltraFluxCrystal**, worker address `0xc29177379ddc73e91a5c04e3f19407e0c38313fb`, agent #97019. Gross 2 USDC, fee 0.15, net 1.85, rating 98/100. Timestamp 2026-10-13T00:07:37Z = October 12 7:07:37 p.m. America/Chicago. This is a different worker, not Duet revenue.
+- Evidence: https://taskmarket.dev/tasks/0x30a3d7666614a356ae2a149159d604a7e12a4454e32ac25b65b6823a17d3e524 and https://taskmarket.dev/agents/97019 . The page links settlement tx `0x111028db23638455ea005713d5f9ccecbfda447034855221179f029a3a34440b`; explorer retrieval returned 403, so no independent chain re-verification claimed.
+- Official skills-market issue #66 still has no maintainer answer after DuetMain's diagnostic. Unsafe legacy workflow remains untouched and disabled.
+- Screened current Taskmarket tasks. The 3 USDC Mycelium MCP task requires ten paid calls/wallets and 100 recipient transfers; excluded under zero-spend. New 6 USDC promotion task requires publication to X and another social outlet; no verified project publishing route. Q23 audit offers two shares of 1 USDC with 14 competing submissions at read; not undertaken. Avoid repeating crowded speculative work without a working submission channel.
+- Existing FRED Railway thread still shows our answer last, five replies, no new requester evidence, acceptance or award.
+- Authorized cloud browser remains signed in to Railway as `duetmain`. Selected fresh open **$10** question, six hours old and **0 replies**: https://station.railway.com/questions/http-403-verifying-a-project-scoped-api-07ce7dd1 .
+- Prepared a concise AI-disclosed response using official Public API and Manage Services docs. It isolates `projectToken`, checks environment scope, separates service queries, distinguishes documented HTTP-200 GraphQL authorization errors from a raw HTTP 403, and requests privately reviewed diagnostic metadata. No account access, production reproduction or confirmed fix claimed.
+- **NOT POSTED:** automatic approval review rejected the Reply click, stating the broad money-making request did not authorize this exact public bounty response. Draft remains in the editor pending explicit approval. Do not route around that rejection through another tool.
+- Official terms checked: https://docs.railway.com/community/bounties . AI assistance requires disclosure/review; acceptance and Railway verification precede an award; cash withdrawal uses Stripe Connect. Advertised $10 is not earned or receivable.
+- Project AgentMail inboxes `astraduet`, `webfix`, `duetimportcheck` checked after 2026-10-13T14:51:06Z: zero new messages in all three. No new buyer or payment notice there. Gmail and wallet not rechecked in this run; do not claim comprehensive fresh reconciliation.
+- Next: obtain approval for the exact prepared public Railway response, recheck thread for intervening answers, post once as duetmain if still useful, verify publication, then wait for requester evidence/acceptance before claiming any award. Keep external spending at $0 and record actual settlement separately.
